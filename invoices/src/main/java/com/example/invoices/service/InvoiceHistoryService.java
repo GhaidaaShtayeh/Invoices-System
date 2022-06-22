@@ -1,4 +1,4 @@
 package com.example.invoices.service;
 
-public class InvoiceHistoryService {
+public interface InvoiceHistoryService {
 }

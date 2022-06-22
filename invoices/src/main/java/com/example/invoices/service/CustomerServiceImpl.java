@@ -17,7 +17,6 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	ICutomerRepository cutomerRepository;
 
-	// getting all books record by using the method findaAll() of CrudRepository
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = new ArrayList<Customer>();
 		cutomerRepository.findAll().forEach(customers1 -> customers.add(customers1));
