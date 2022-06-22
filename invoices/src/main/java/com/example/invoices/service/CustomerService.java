@@ -1,7 +1,9 @@
 package com.example.invoices.service;
 
+import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
+import org.springframework.http.ResponseEntity;
 
 public interface CustomerService {
 
@@ -9,7 +11,7 @@ public interface CustomerService {
 
 	public Customer getCustomer(int id);
 
-	public Customer updateCustomer(Customer customer);
+	public Customer updateCustomer(CustomerDTO customer);
 
 	public Invoice updateCustomerInvoice(Invoice invoince, int id);
 

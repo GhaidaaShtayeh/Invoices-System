@@ -1,8 +1,7 @@
 package com.example.invoices.controller;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.example.invoices.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,59 +26,73 @@ public class CustomerController {
     CustomerServiceImpl customerService;
 
     @GetMapping("/viewList")
-    private List<Customer> getAllCustomers()
-    {
-        return customerService.getAllCustomers();
-    }
+	public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
+		try {
+			List<CustomerDTO> customers = new ArrayList<CustomerDTO>();
+			customers = customerService.getAllCustomers();
+			if (customers.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(customers, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
     
     
     
     @GetMapping("/getCustomersByPageLimit")
     public List<Customer> getListOfCustomers(){
-    	
-    	
+
     	return null;
     }
     
     @PostMapping("/save")
-	public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
-		//Customer customer = mapper.fromCustomerDTO(customerDto);
-		Customer customer1 = customerService.addCustomer(customer);
-		if (customer1.getId() > 0)
-			return new ResponseEntity<Customer>(customer1, HttpStatus.CREATED);
-		else
-			return new ResponseEntity<String>("Customer is not added", HttpStatus.METHOD_FAILURE);
-	}
-	
-	@PutMapping("/updateCustomer")
-	public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
+		public ResponseEntity<Customer> addCustomer(CustomerDTO customer) {
+			try {
+				Customer newCustomer = customerService
+						.addCustomer(new Customer(customer.getSerialNumber(), customer.getFirstName(),customer.getLastName(),customer.getEmail(),customer.getMobileNumber()));
+				return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+			} catch (Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 
-		Customer customer1 = customerService.updateCustomer(customer);
-
-		return new ResponseEntity<Customer>(customer1, HttpStatus.OK);
-	}
 	
 	
 	@PatchMapping("/updateCustomerInvoice")
-	public ResponseEntity<Customer> updateCustomerInvoice(@RequestBody Customer customer) {
+	public ResponseEntity<CustomerDTO> updateCustomerInvoice(@RequestBody CustomerDTO customer) {
 		Set<Invoice> updatedList = new HashSet<>();
 		
-        for(Invoice invoince: customer.getInvoices()) {
+        for(Invoice invoice: customer.getInvoices()) {
 		
-		Invoice updatedInvoince = customerService.updateCustomerInvoice(invoince,  customer.getId());
-		updatedList.add(updatedInvoince);
+		Invoice updatedInvoice = customerService.updateCustomerInvoice(invoice,  customer.getId());
+		updatedList.add(updatedInvoice);
         }
         customer.setInvoices(updatedList);
-		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+		return new ResponseEntity<CustomerDTO>(customer, HttpStatus.OK);
 	}
-	 
+
+	@PutMapping("/customer/{id}")
+	public ResponseEntity<Customer> updateCustomer( @RequestBody CustomerDTO customer) {
+		try{
+			Customer newCustomer = customerService.updateCustomer(customer);
+			return new ResponseEntity<>(newCustomer, HttpStatus.OK);
+
+		}catch (Exception exception){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
 	@GetMapping("/getCustomer/{customerId}")
 	public ResponseEntity<?> getCustomer(@PathVariable int customerId) {
-
-		Customer customer1 = customerService.getCustomer(customerId);
-		return new ResponseEntity<Customer>(customer1, HttpStatus.OK);
-	}
+			Optional<Customer> customerData = Optional.ofNullable(customerService.getCustomer(customerId));
+			if (customerData.isPresent()) {
+				return new ResponseEntity<>(customerData.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		}
 	
 	@DeleteMapping("/deleteCustomer/{customerId}")
 	public ResponseEntity<?> deleteCustomer(int customerId) {

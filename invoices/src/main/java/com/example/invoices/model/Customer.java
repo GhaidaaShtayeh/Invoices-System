@@ -1,8 +1,10 @@
 package com.example.invoices.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
-
+@Data
 @Entity
 @Table(name = "customer")
 
@@ -70,7 +72,16 @@ public class Customer {
 	public Set<Invoice> getInvoices() {
 		return invoices;
 	}
-	public void setLastName(String lastName) {
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public void setInvoices(Set<Invoice> invoices) {

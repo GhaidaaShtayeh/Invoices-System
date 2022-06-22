@@ -56,9 +56,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-        .antMatchers("employee/save").hasRole("SUPER_USER")
+        .antMatchers("/employee/save").hasRole("SUPER_USER")
         .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER, AUDITOR, USER")
-        .antMatchers("/customer/getCustomersByPageLimit").hasAnyRole("SUPER_USER, AUDITOR")
+        .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
         .antMatchers("/h2-console/**").permitAll()
         .antMatchers("/login").permitAll()
         .anyRequest().authenticated();

@@ -26,7 +26,6 @@ public class JwtTokenUtil {
     public String generateAccessToken(Employee user) {
         return Jwts.builder()
                 .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
-                .setIssuer("CodeJava")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
