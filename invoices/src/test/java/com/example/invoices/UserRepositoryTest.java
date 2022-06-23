@@ -28,7 +28,7 @@ public class UserRepositoryTest {
     @Test
     public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role role =new Role(Type.ROLE_SUPER_USER,"test");
+        Role role =new Role(Type.SUPER_USER,"test");
         String rawPassword = "nam2020";
         String encodedPassword = passwordEncoder.encode(rawPassword);
         Employee newEmployee = new Employee(22222,"test10","test002",role,"nam@codejava.net","00501","Palestine",encodedPassword);

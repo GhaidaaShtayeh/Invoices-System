@@ -44,7 +44,7 @@ public class Customer {
     public String getName() {
         return this.firstName;
     }
-    public Long getSerialNumber() {
+    public Long getSerialNumber(Long serialNumber) {
         return this.serialNumber;
     }
     public String getEmail() {
@@ -87,6 +87,12 @@ public class Customer {
 	public void setInvoices(Set<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-    
-    
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

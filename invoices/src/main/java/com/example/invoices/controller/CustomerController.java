@@ -24,34 +24,27 @@ import com.example.invoices.service.CustomerServiceImpl;
 public class CustomerController {
     @Autowired
     CustomerServiceImpl customerService;
-
     @GetMapping("/viewList")
-	public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
-		try {
-			List<CustomerDTO> customers = new ArrayList<CustomerDTO>();
+	public ResponseEntity<List<Customer>> getAllCustomers() {
+			List<Customer> customers = new ArrayList<>();
 			customers = customerService.getAllCustomers();
 			if (customers.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<>(customers, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
-    
-    
-    
     @GetMapping("/getCustomersByPageLimit")
     public List<Customer> getListOfCustomers(){
 
     	return null;
     }
-    
     @PostMapping("/save")
-		public ResponseEntity<Customer> addCustomer(CustomerDTO customer) {
+		public ResponseEntity<Customer> addCustomer(@RequestBody CustomerDTO customer) {
 			try {
+				System.out.println(customer.getEmail()+"00000000000000000000000000000000000000000000000000");
 				Customer newCustomer = customerService
 						.addCustomer(new Customer(customer.getSerialNumber(), customer.getFirstName(),customer.getLastName(),customer.getEmail(),customer.getMobileNumber()));
+				System.out.println(customer.getEmail()+ "*******************************************************");
 				return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
 			} catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,19 +66,16 @@ public class CustomerController {
 		return new ResponseEntity<CustomerDTO>(customer, HttpStatus.OK);
 	}
 
-	@PutMapping("/customer/{id}")
-	public ResponseEntity<Customer> updateCustomer( @RequestBody CustomerDTO customer) {
-		try{
-			Customer newCustomer = customerService.updateCustomer(customer);
-			return new ResponseEntity<>(newCustomer, HttpStatus.OK);
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") int id, @RequestBody CustomerDTO customer) {
 
-		}catch (Exception exception){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		Customer customer1 = customerService.updateCustomer(id, customer);
+
+		return new ResponseEntity<Customer>(customer1, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getCustomer/{customerId}")
-	public ResponseEntity<?> getCustomer(@PathVariable int customerId) {
+	public ResponseEntity<?> getCustomer(@PathVariable @RequestBody int customerId) {
 			Optional<Customer> customerData = Optional.ofNullable(customerService.getCustomer(customerId));
 			if (customerData.isPresent()) {
 				return new ResponseEntity<>(customerData.get(), HttpStatus.OK);
@@ -94,17 +84,17 @@ public class CustomerController {
 			}
 		}
 	
-	@DeleteMapping("/deleteCustomer/{customerId}")
-	public ResponseEntity<?> deleteCustomer(int customerId) {
+	@PutMapping("/deleteCustomer/{customerId}")
+	public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
 
 		if (customerId > 0) {
-			Customer customer1 = new Customer();
-			int deleteStatus = customerService.deleteCustomer(customer1);
-			if (deleteStatus >= 1) {
+			CustomerDTO customer1 = new CustomerDTO();
+			boolean deleteStatus = customerService.deleteCustomer(customerId,customer1);
+			if (deleteStatus) {
 				return new ResponseEntity<String>("Customer deleted succeessfully.", HttpStatus.OK);
 			}
 		} else {
-			//throw new EmptyInputParam("Customer id not found", 400);
+			return new ResponseEntity<String>("Customer not deleted .", HttpStatus.NOT_FOUND);
 		}
 
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);

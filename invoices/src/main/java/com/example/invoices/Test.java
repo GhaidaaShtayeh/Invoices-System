@@ -15,7 +15,7 @@ public class Test{
 	
 	public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role role =new Role(Type.ROLE_USER,"test");
+        Role role =new Role(Type.SUPER_USER,"test");
         String rawPassword = "0000";
         String encodedPassword = passwordEncoder.encode(rawPassword);
         Employee newEmployee = new Employee(1111,"test10","test002",role,"gh@gmail.com","00501","Palestine",encodedPassword);

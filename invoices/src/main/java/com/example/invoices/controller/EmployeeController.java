@@ -1,5 +1,6 @@
 package com.example.invoices.controller;
 
+import com.example.invoices.dto.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ public class EmployeeController {
 
 	@RolesAllowed({ "USER" })
 	@PostMapping("/save")
-	public ResponseEntity<?> addEmployee(@RequestBody Employee employee) {
+	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 
-		Employee employee1 = employeeService.saveEmployee(employee);
+		Employee employee1 = employeeService.saveEmployee(new Employee(employee));
 		if (employee1.getId() > 0)
 			return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);
 		else
@@ -34,18 +35,5 @@ public class EmployeeController {
 	}
 	
 	
-	
-	
-	
-	@DeleteMapping("/delete/{employeeId}")
-	public ResponseEntity<?> deleteEmployee(int employeeId) {
 
-		if (employeeId > 0) {
-			Employee deletedObject = employeeService.deleteEmployee(employeeId);
-
-			return new ResponseEntity<Employee>(deletedObject, HttpStatus.NOT_MODIFIED);
-		} else {
-			return new ResponseEntity<String>("Employee is not Deleted", HttpStatus.METHOD_FAILURE);
-		}
-	}
 }

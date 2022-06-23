@@ -1,5 +1,6 @@
 package com.example.invoices.model;
 
+import com.example.invoices.dto.EmployeeDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -46,6 +47,18 @@ public class Employee implements UserDetails {
         this.mobileNumber = mobileNumber;
         this.country = country;
         this.password = password;
+        this.isDeleted = false;
+    }
+
+    public Employee(EmployeeDTO employee) {
+        this.setEmail(employee.getEmail());
+        this.setSerialNumber(employee.getSerialNumber());
+        this.setPassword(employee.getPassword());
+        this.setFirstName(employee.getFirstName());
+        this.setLastName(employee.getLastName());
+        this.setRole(employee.getRole());
+        this.setMobileNumber(employee.getMobileNumber());
+        this.setCountry(employee.getCountry());
         this.isDeleted = false;
     }
 
