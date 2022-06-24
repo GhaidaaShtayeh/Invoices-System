@@ -4,6 +4,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.invoices.model.Employee;
+import com.example.invoices.utilite.Type;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -63,7 +66,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
        //log.info("username " + username+  "roles" + authorities);
 
-
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getUserPrincipal(), null, null);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        filterChain.doFilter(request, response);
         if (!jwtUtil.validateAccessToken(token)) {
             filterChain.doFilter(request, response);
             return;
@@ -90,9 +96,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private void setAuthenticationContext(String token, HttpServletRequest request) {
         UserDetails userDetails = getUserDetails(token);
+        List<GrantedAuthority> authorityList= new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_SUPER_USER"));
 
         UsernamePasswordAuthenticationToken
-                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorityList);
 
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request));
@@ -106,12 +114,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         userDetails.setId(Integer.parseInt(jwtSubject[0]));
         userDetails.setEmail(jwtSubject[1]);
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-
-        //userDetails.setRole(token.getc);
        // userDetails.setRole(jwtSubject.g);
-         //                 System.out.println("--------------------------> JWT with SUB"+jwtSubject[0]+""+jwtSubject[1]+""+jwtSubject[2]+""+jwtSubject[3]);
+
         return (UserDetails) userDetails;
     }
 }

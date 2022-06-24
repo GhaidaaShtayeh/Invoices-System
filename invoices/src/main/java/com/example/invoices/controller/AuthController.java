@@ -44,11 +44,11 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
+
     @Autowired
     Test test;
     @GetMapping("/login")
     public void insertUserRec() {
-    	test.testCreatEmployee();
+        test.testCreatEmployee();
     }
 }

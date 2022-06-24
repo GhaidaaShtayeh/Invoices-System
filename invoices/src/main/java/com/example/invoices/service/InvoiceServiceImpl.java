@@ -41,9 +41,9 @@ public class InvoiceServiceImpl implements  InvoiceService {
     @Override
     public boolean deleteInvoice(int invoiceId) {
         try{
-            Invoice customer = invoiceRepository.findById(invoiceId).get();
-            customer.setDeleted(true);
-            invoiceRepository.save(customer);
+            Invoice invoice = invoiceRepository.findById(invoiceId).get();
+            invoice.setDeleted(true);
+            invoiceRepository.save(invoice);
             return true;
         }catch(Exception exception){
             return false;
