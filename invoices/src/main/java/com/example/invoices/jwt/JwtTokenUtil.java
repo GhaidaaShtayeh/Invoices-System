@@ -1,13 +1,18 @@
 package com.example.invoices.jwt;
 
 import com.example.invoices.model.Employee;
+import com.example.invoices.model.Role;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javax.crypto.Cipher.SECRET_KEY;
 
@@ -24,11 +29,16 @@ public class JwtTokenUtil {
     private String SECRET_KEY;
 
     public String generateAccessToken(Employee user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("Role", user.getRole());
+     //   claims.put("username", user.getUsername());
         return Jwts.builder()
-                .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
+                .setSubject(String.format("%s,%s,%s", user.getId(), user.getEmail(),user.getRole().getName()))
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+
                 .compact();
 
     }

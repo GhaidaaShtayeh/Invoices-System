@@ -17,6 +17,8 @@ import javax.transaction.Transactional;
 public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	ICutomerRepository cutomerRepository;
+
+
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers =  cutomerRepository.findAll();
 		return customers;
@@ -49,9 +51,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean deleteCustomer(int empId, CustomerDTO customerDetails) {
+	public boolean deleteCustomer(int customerId) {
 		try {
-			Customer customer = cutomerRepository.findById(empId).get();
+			Customer customer = cutomerRepository.findById(customerId).get();
 			customer.setDeleted(true);
 			cutomerRepository.save(customer);
 			return true;

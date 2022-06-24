@@ -24,6 +24,9 @@ import com.example.invoices.service.CustomerServiceImpl;
 public class CustomerController {
     @Autowired
     CustomerServiceImpl customerService;
+
+
+
     @GetMapping("/viewList")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 			List<Customer> customers = new ArrayList<>();
@@ -33,18 +36,18 @@ public class CustomerController {
 			}
 			return new ResponseEntity<>(customers, HttpStatus.OK);
 	}
+
     @GetMapping("/getCustomersByPageLimit")
     public List<Customer> getListOfCustomers(){
 
     	return null;
     }
+
     @PostMapping("/save")
 		public ResponseEntity<Customer> addCustomer(@RequestBody CustomerDTO customer) {
 			try {
-				System.out.println(customer.getEmail()+"00000000000000000000000000000000000000000000000000");
 				Customer newCustomer = customerService
 						.addCustomer(new Customer(customer.getSerialNumber(), customer.getFirstName(),customer.getLastName(),customer.getEmail(),customer.getMobileNumber()));
-				System.out.println(customer.getEmail()+ "*******************************************************");
 				return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
 			} catch (Exception e) {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,10 +89,8 @@ public class CustomerController {
 	
 	@PutMapping("/deleteCustomer/{customerId}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
-
 		if (customerId > 0) {
-			CustomerDTO customer1 = new CustomerDTO();
-			boolean deleteStatus = customerService.deleteCustomer(customerId,customer1);
+			boolean deleteStatus = customerService.deleteCustomer(customerId);
 			if (deleteStatus) {
 				return new ResponseEntity<String>("Customer deleted succeessfully.", HttpStatus.OK);
 			}

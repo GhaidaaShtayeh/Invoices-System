@@ -1,10 +1,17 @@
 package com.example.invoices.jwt;
-
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.invoices.model.Employee;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -14,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -29,13 +38,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import static java.util.Arrays.stream;
+
 
 @Data
 @Component
+@Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtUtil;
-
+    @Value("${app.jwt.secret}")
+    private String SECRET_KEY;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
@@ -47,6 +60,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         String token = getAccessToken(request);
+
+       //log.info("username " + username+  "roles" + authorities);
+
 
         if (!jwtUtil.validateAccessToken(token)) {
             filterChain.doFilter(request, response);
@@ -90,7 +106,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         userDetails.setId(Integer.parseInt(jwtSubject[0]));
         userDetails.setEmail(jwtSubject[1]);
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
+
+        //userDetails.setRole(token.getc);
+       // userDetails.setRole(jwtSubject.g);
+         //                 System.out.println("--------------------------> JWT with SUB"+jwtSubject[0]+""+jwtSubject[1]+""+jwtSubject[2]+""+jwtSubject[3]);
         return (UserDetails) userDetails;
     }
 }

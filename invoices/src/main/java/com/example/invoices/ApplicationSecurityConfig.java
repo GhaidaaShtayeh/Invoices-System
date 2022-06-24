@@ -57,10 +57,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
         .antMatchers("/employee/save").hasRole("SUPER_USER")
-      //  .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER, AUDITOR, USER")
+        .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER, AUDITOR, USER")
         .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
-        .antMatchers("/h2-console/**").permitAll()
+
+                .antMatchers("/h2-console/**").permitAll()
         .antMatchers("/login").permitAll()
+                .antMatchers("/invoice/viewList").permitAll()
+                .antMatchers("/invoice/save").permitAll()
+                .antMatchers("/invoice/update/{id}").permitAll()
         .anyRequest().authenticated();
         http.exceptionHandling()
                 .authenticationEntryPoint(

@@ -11,11 +11,11 @@ public interface CustomerService {
 
 	public Customer addCustomer(Customer customer);
 
-	public Customer getCustomer(int id);
+	public Customer getCustomer(int customerId);
 
 	public Invoice updateCustomerInvoice(Invoice invoince, int id);
 
-	Customer updateCustomer(int empId, CustomerDTO employeeDetails);
+	public Customer updateCustomer(int customerId, CustomerDTO customerDetails);
 
-	public boolean deleteCustomer(int empId, CustomerDTO customerDetails);
+	public boolean deleteCustomer(int customerId);
 }
