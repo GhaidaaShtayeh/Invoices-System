@@ -20,13 +20,16 @@ public class Item {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToMany()
+   /* @ManyToMany()
     @JoinTable(
             name = "invoice_item",
             joinColumns = @JoinColumn(name = "invoice_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    private Set<Invoice> invoices;
+    private Set<Invoice> invoices;*/
+
+    @OneToMany (mappedBy = "invoice")
+    private Set <InvoiceItem> quantity;
 
     public Item(){}
     public Item(long serialNumber, String name, int unitPrice, Timestamp craetedDate){

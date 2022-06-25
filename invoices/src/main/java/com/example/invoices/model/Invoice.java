@@ -30,13 +30,16 @@ public class Invoice {
     @OneToMany
     private Set<InvoiceHistory> invoiceHistories;
 
-    @ManyToMany()
+  /*  @ManyToMany()
     @JoinTable(
             name = "invoice_item",
             joinColumns = @JoinColumn(name = "item_id "),
             inverseJoinColumns = @JoinColumn(name = "invoice_id ")
     )
-    private Set<Item> items;
+    private Set<Item> items;*/
+
+    @OneToMany (mappedBy = "invoice")
+    private Set <InvoiceItem> quantity;
 
     public Invoice(long serialNumber, String status, Timestamp createdDate) {
         this.serialNumber = serialNumber;
@@ -93,10 +96,10 @@ public class Invoice {
     public void setInvoiceHistories(Set<InvoiceHistory> invoiceHistories) {
         this.invoiceHistories = invoiceHistories;
     }
-    public Set<Item> getItems() {
+/*    public Set<Item> getItems() {
         return items;
     }
     public void setItems(Set<Item> items) {
         this.items = items;
-    }
+    }*/
 }
