@@ -1,6 +1,7 @@
 package com.example.invoices.jwt;
 
 import com.example.invoices.model.Employee;
+import com.example.invoices.model.Role;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +26,12 @@ public class JwtTokenUtil {
 
     public String generateAccessToken(Employee user) {
         return Jwts.builder()
-                .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
-                .setIssuer("CodeJava")
+                .setSubject(String.format("%s,%s,%s", user.getId(), user.getEmail(),user.getRole().getName()))
+                .claim("role",user.getRole().getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+
                 .compact();
 
     }
@@ -57,7 +59,7 @@ public class JwtTokenUtil {
         return parseClaims(token).getSubject();
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(String.valueOf(SECRET_KEY))
                 .parseClaimsJws(token)

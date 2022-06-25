@@ -42,4 +42,53 @@ public class EmployeeDTO {
         super();
     }
 
+    public void setId(int parseInt) {
+        this.id = parseInt;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public Role getRole() {
+        return role;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public String getEmail() {
+        return this.email;
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
 }

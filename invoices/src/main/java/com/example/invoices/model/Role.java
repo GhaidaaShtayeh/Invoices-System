@@ -16,8 +16,7 @@ public class Role {
     private Type name;
     @Column(name = "description")
     private String description;
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
+
 
     @OneToMany
     private Set<Employee> employees;
@@ -26,7 +25,6 @@ public class Role {
     public Role(Type name , String description){
        this.name = name;
        this.description=description;
-       this.isDeleted = false;
    }
 
     public String getDescription() { return description; }

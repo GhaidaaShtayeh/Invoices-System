@@ -1,5 +1,6 @@
 package com.example.invoices.service;
 
+import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.repository.ICutomerRepository;
@@ -7,7 +8,7 @@ import com.example.invoices.repository.ICutomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -17,20 +18,17 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	ICutomerRepository cutomerRepository;
 
+
 	public List<Customer> getAllCustomers() {
-		List<Customer> customers = new ArrayList<Customer>();
-		cutomerRepository.findAll().forEach(customers1 -> customers.add(customers1));
-		for (Customer cus : customers) {
-			System.out.println("***************************");
-			System.out.println(cus.getName());
-		}
+		List<Customer> customers =  cutomerRepository.findAll();
 		return customers;
 	}
 
 	@Override
 	@Transactional
 	public Customer addCustomer(Customer customer) {
-		return cutomerRepository.save(customer);
+		Customer newCustomer = cutomerRepository.save(customer);
+		return newCustomer;
 	}
 
 	@Override
@@ -41,34 +39,27 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
-	public Customer updateCustomer(Customer customer) {
-		if (cutomerRepository.findById(customer.getId()) != null) {
-			// System.out.println("Id:"+book.getId());
-			Customer persistenceCustomer = cutomerRepository.findById(customer.getId()).get();
-			if (customer.getEmail() != null) {
-				persistenceCustomer.setEmail(customer.getEmail());
-				;
-			}
-			if (customer.getMobileNumber() != null) {
-				persistenceCustomer.setMobileNumber(customer.getMobileNumber());
-			}
-			if (customer.getInvoices().size() > 0) {
-				persistenceCustomer.setInvoices(customer.getInvoices());
-			}
+	public Customer updateCustomer(int customerId, CustomerDTO customerDetails) {
+		Customer customer = cutomerRepository.findById(customerId).get();
+		customer.setFirstName(customerDetails.getFirstName());
+		customer.setLastName(customerDetails.getLastName());
+		customer.setEmail(customerDetails.getEmail());
+		customer.setMobileNumber(customerDetails.getMobileNumber());
+		customer.getSerialNumber(customerDetails.getSerialNumber());
 
-			return cutomerRepository.save(persistenceCustomer);
-		}
-		return null;
+		return cutomerRepository.save(customer);
 	}
 
 	@Override
-	public int deleteCustomer(Customer customer) {
+	public boolean deleteCustomer(int customerId) {
 		try {
-			cutomerRepository.delete(customer);
+			Customer customer = cutomerRepository.findById(customerId).get();
+			customer.setDeleted(true);
+			cutomerRepository.save(customer);
+			return true;
 		} catch (Exception e) {
-			return 0;
+			return false;
 		}
-		return 1;
 	}
 
 	@Override

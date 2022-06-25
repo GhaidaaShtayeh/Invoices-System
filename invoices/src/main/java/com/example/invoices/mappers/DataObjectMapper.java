@@ -1,4 +1,4 @@
-package com.example.invoices.mappers;
+/*package com.example.invoices.mappers;
 
 import org.mapstruct.Mapper;
 
@@ -15,3 +15,4 @@ public interface DataObjectMapper {
 	public EmployeeDTO toEmployeeDTO(Employee employee);
 	public Employee fromEmployeeDTO(EmployeeDTO employeeDto);
 }
+*/

@@ -1,8 +1,10 @@
 package com.example.invoices.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
-
+@Data
 @Entity
 @Table(name = "customer")
 
@@ -42,7 +44,7 @@ public class Customer {
     public String getName() {
         return this.firstName;
     }
-    public Long getSerialNumber() {
+    public Long getSerialNumber(Long serialNumber) {
         return this.serialNumber;
     }
     public String getEmail() {
@@ -70,12 +72,27 @@ public class Customer {
 	public Set<Invoice> getInvoices() {
 		return invoices;
 	}
-	public void setLastName(String lastName) {
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public void setInvoices(Set<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-    
-    
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

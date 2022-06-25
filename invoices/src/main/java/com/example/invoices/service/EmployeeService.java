@@ -6,6 +6,4 @@ public interface EmployeeService {
 
 	public Employee saveEmployee(Employee employee);
 	public Employee getEmployee(Employee employee);
-	public Employee updateEmployee(Employee employee);
-	public Employee deleteEmployee(int empId);
 }
