@@ -1,12 +1,14 @@
 package com.example.invoices.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "invoiceItem")
+@Table(name = "invoice_item")
 @Data
+@NoArgsConstructor
 public class InvoiceItem {
 
     @Id
@@ -30,7 +32,6 @@ public class InvoiceItem {
         this.invoice=invoice;
         this.item=item;
     }
-
 
     public int getId() {
         return id;

@@ -41,8 +41,6 @@ public class InvoiceController {
         }
     }
 
-
-
     @PutMapping("/update/{id}")
     public ResponseEntity<Invoice> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
 

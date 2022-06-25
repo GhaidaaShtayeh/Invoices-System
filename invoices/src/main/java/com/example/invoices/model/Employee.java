@@ -24,7 +24,6 @@ public class Employee implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -38,16 +37,10 @@ public class Employee implements UserDetails {
     private Set<Invoice> invoices;
     @OneToMany
     private Set<InvoiceHistory> invoiceHistories;
-
-
-
-
-
     public Employee(){}
     public Employee(Employee user){
 
     }
-
     public Employee(long serialNumber, String firstName, String lastName, Role role, String email, String mobileNumber,String country,String password){
         super();
         this.serialNumber = serialNumber;
@@ -60,7 +53,6 @@ public class Employee implements UserDetails {
         this.password = password;
         this.isDeleted = false;
     }
-
     public Employee(EmployeeDTO employee) {
         this.setEmail(employee.getEmail());
         this.setSerialNumber(employee.getSerialNumber());
@@ -72,7 +64,6 @@ public class Employee implements UserDetails {
         this.setCountry(employee.getCountry());
         this.isDeleted = false;
     }
-
     public int getId() {
         return this.id;
     }
@@ -101,19 +92,14 @@ public class Employee implements UserDetails {
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-
-
         return null;
 }
     @Override
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -121,27 +107,22 @@ public class Employee implements UserDetails {
     public String getUsername() {
         return this.email;
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     @Override
     public boolean isEnabled() {
         return true;
     }
-
     public void setId(int parseInt) {
         this.id = parseInt;
     }
@@ -175,6 +156,5 @@ public class Employee implements UserDetails {
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
-
 
 }

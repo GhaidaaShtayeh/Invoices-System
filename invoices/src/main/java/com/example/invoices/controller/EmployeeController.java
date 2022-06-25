@@ -23,7 +23,6 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService employeeService;
 
-	//@RolesAllowed({ "USER" })
 	@PostMapping("/save")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 		Employee employee1 = employeeService.saveEmployee(new Employee(employee));
@@ -32,7 +31,5 @@ public class EmployeeController {
 		else
 			return new ResponseEntity<String>("Employee is not added", HttpStatus.METHOD_FAILURE);
 	}
-
-
 
 }

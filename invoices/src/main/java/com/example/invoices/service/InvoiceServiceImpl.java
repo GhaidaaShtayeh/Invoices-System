@@ -1,10 +1,8 @@
 package com.example.invoices.service;
 
-import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.dto.InvoiceDTO;
-import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
-import com.example.invoices.repository.IInvoiceRepository;
+import com.example.invoices.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,7 @@ import java.util.List;
 @Service
 public class InvoiceServiceImpl implements  InvoiceService {
     @Autowired
-    IInvoiceRepository invoiceRepository ;
+    InvoiceRepository invoiceRepository ;
 
     @Override
     @Transactional

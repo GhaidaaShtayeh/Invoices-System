@@ -25,8 +25,6 @@ public class CustomerController {
     @Autowired
     CustomerServiceImpl customerService;
 
-
-
     @GetMapping("/viewList")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 			List<Customer> customers = new ArrayList<>();
@@ -54,8 +52,6 @@ public class CustomerController {
 			}
 		}
 
-	
-	
 	@PatchMapping("/updateCustomerInvoice")
 	public ResponseEntity<CustomerDTO> updateCustomerInvoice(@RequestBody CustomerDTO customer) {
 		Set<Invoice> updatedList = new HashSet<>();

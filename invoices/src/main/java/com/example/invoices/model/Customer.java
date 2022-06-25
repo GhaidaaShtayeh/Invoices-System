@@ -7,7 +7,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "customer")
-
 public class Customer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -72,26 +71,21 @@ public class Customer {
 	public Set<Invoice> getInvoices() {
 		return invoices;
 	}
-
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public void setInvoices(Set<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-
     public boolean isDeleted() {
         return isDeleted;
     }
-
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }

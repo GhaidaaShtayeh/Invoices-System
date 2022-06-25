@@ -3,12 +3,11 @@ package com.example.invoices.service;
 import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
-import com.example.invoices.repository.ICutomerRepository;
+import com.example.invoices.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -16,7 +15,7 @@ import javax.transaction.Transactional;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 	@Autowired
-	ICutomerRepository cutomerRepository;
+	CustomerRepository cutomerRepository;
 
 
 	public List<Customer> getAllCustomers() {

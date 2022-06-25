@@ -1,7 +1,7 @@
 package com.example.invoices;
 
 import com.example.invoices.jwt.JwtTokenFilter;
-import com.example.invoices.repository.IEmployeeRepository;
+import com.example.invoices.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private IEmployeeRepository userRepo;
+    private EmployeeRepository userRepo;
     @Autowired
     JwtTokenFilter jwtTokenFilter;
 
@@ -57,11 +57,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
         .antMatchers("/employee/save").hasRole("SUPER_USER")
-        .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER, AUDITOR, USER")
+        .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER","AUDITOR", "USER")
         .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
 
                 .antMatchers("/h2-console/**").permitAll()
-        .antMatchers("/login").permitAll()
+                .antMatchers("/login").permitAll()
                 .antMatchers("/invoice/viewList").permitAll()
                 .antMatchers("/invoice/save").permitAll()
                 .antMatchers("/invoice/update/{id}").permitAll()

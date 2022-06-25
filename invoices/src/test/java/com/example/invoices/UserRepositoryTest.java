@@ -2,7 +2,7 @@ package com.example.invoices;
 
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.Role;
-import com.example.invoices.repository.IEmployeeRepository;
+import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.utilite.Type;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Rollback(value = false)
 public class UserRepositoryTest {
     @Autowired
-    IEmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
     @Test
     public void testCreatEmployee(){

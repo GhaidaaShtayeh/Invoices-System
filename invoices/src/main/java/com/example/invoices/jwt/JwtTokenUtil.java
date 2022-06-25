@@ -15,8 +15,6 @@ import static javax.crypto.Cipher.SECRET_KEY;
 @Component
 public class JwtTokenUtil {
 
-    // previous code is not shown...
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     private static final long EXPIRE_DURATION = 24 * 60 * 60 * 1000; // 24 hour
@@ -31,7 +29,6 @@ public class JwtTokenUtil {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-
                 .compact();
 
     }

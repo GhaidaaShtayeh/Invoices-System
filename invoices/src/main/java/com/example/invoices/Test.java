@@ -1,5 +1,6 @@
 
 package com.example.invoices;
+import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.utilite.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -7,11 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.Role;
-import com.example.invoices.repository.IEmployeeRepository;
 @Component
 public class Test{
     @Autowired
-    IEmployeeRepository employeeRepository;
+    EmployeeRepository employeeRepository;
 
     public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

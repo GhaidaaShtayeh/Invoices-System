@@ -1,11 +1,8 @@
 package com.example.invoices.service;
 
-import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.dto.InvoiceItemDTO;
-import com.example.invoices.model.Invoice;
 import com.example.invoices.model.InvoiceItem;
-import com.example.invoices.repository.IInvoiceItemRepository;
-import com.example.invoices.repository.IInvoiceRepository;
+import com.example.invoices.repository.InvoiceItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +14,7 @@ import java.util.List;
 
 public class InvoiceItemServiceImpl implements  InvoiceItemService{
     @Autowired
-    IInvoiceItemRepository invoiceRepository ;
+    InvoiceItemRepository invoiceRepository ;
     @Override
     public InvoiceItem saveInvoiceItem(InvoiceItem invoice) {
 

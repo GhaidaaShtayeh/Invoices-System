@@ -3,13 +3,12 @@ package com.example.invoices.service;
 import java.util.Optional;
 
 import com.example.invoices.dto.EmployeeDTO;
+import com.example.invoices.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.invoices.model.Employee;
-import com.example.invoices.repository.IEmployeeRepository;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -18,7 +17,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	 PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	IEmployeeRepository employeeRepository;
+	EmployeeRepository employeeRepository;
 	
 	@Override
 	public Employee saveEmployee(Employee employee) {
