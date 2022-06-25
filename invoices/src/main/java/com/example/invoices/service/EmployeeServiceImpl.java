@@ -2,6 +2,7 @@ package com.example.invoices.service;
 
 import java.util.Optional;
 
+import com.example.invoices.dto.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,27 +35,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return emp.get();
 	}
 
-	@Override
-	public Employee updateEmployee(Employee employee) {
-		
-		return null;
-	}
 
-	@Override
-	public Employee deleteEmployee(int empId) {
-		try {
-			Optional<Employee> empObj = employeeRepository.findById(empId);
-			empObj.orElseThrow(() -> new UsernameNotFoundException("Employee not found."));
-			
-			if(empObj.isPresent()) {
-				employeeRepository.delete(empObj.get());
-			}
-			return empObj.get() ;
-			
-		} catch (Exception e) {
-			
-			return null;
-		}
-	}
 
 }
