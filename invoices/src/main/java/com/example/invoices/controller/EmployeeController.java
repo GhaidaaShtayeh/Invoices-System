@@ -19,21 +19,20 @@ import javax.annotation.security.RolesAllowed;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-	
+
 	@Autowired
 	EmployeeService employeeService;
 
-	@RolesAllowed({ "USER" })
+	//@RolesAllowed({ "USER" })
 	@PostMapping("/save")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
-
 		Employee employee1 = employeeService.saveEmployee(new Employee(employee));
 		if (employee1.getId() > 0)
 			return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);
 		else
 			return new ResponseEntity<String>("Employee is not added", HttpStatus.METHOD_FAILURE);
 	}
-	
-	
+
+
 
 }

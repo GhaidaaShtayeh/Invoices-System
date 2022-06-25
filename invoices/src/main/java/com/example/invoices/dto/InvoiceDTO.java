@@ -51,5 +51,6 @@ public class InvoiceDTO {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
 }
 

@@ -2,10 +2,13 @@ package com.example.invoices.model;
 
 import com.example.invoices.dto.EmployeeDTO;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,7 +39,15 @@ public class Employee implements UserDetails {
     @OneToMany
     private Set<InvoiceHistory> invoiceHistories;
 
+
+
+
+
     public Employee(){}
+    public Employee(Employee user){
+
+    }
+
     public Employee(long serialNumber, String firstName, String lastName, Role role, String email, String mobileNumber,String country,String password){
         super();
         this.serialNumber = serialNumber;
@@ -93,9 +104,11 @@ public class Employee implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
+
+
+        return null;
+}
     @Override
     public String getPassword() {
         return password;

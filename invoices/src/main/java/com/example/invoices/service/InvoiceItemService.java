@@ -1,11 +1,15 @@
 package com.example.invoices.service;
 
+import com.example.invoices.dto.InvoiceItemDTO;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.InvoiceItem;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 public interface InvoiceItemService {
     public InvoiceItem saveInvoiceItem(InvoiceItem invoiceItem);
-    public InvoiceItem getInvoiceItem(InvoiceItem invoiceItem);
-    public InvoiceItem updateInvoiceItem(InvoiceItem invoiceItem);
-    public InvoiceItem deleteInvoiceItem(int invoiceId);
+    public List<InvoiceItem> getAllInvoiceItem();
+    public InvoiceItem updateInvoiceItem(int invoiceId, InvoiceItemDTO invoice);
+    public boolean deleteInvoiceItem(int invoiceId);
 }

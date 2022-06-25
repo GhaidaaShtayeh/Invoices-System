@@ -16,6 +16,9 @@ import org.springframework.test.annotation.Rollback;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
@@ -28,10 +31,15 @@ public class UserRepositoryTest {
     @Test
     public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role role =new Role(Type.SUPER_USER,"test");
+        Role role =  new Role(Type.SUPER_USER,"test");
+
+
+
         String rawPassword = "nam2020";
+
+
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        Employee newEmployee = new Employee(22222,"test10","test002",role,"nam@codejava.net","00501","Palestine",encodedPassword);
+        Employee newEmployee = new Employee(22225552,"test10","test002",role,"nam@test.net","55555","Palestine",encodedPassword);
         Employee savedEmployee = employeeRepository.save(newEmployee);
         assertThat(savedEmployee).isNotNull();
         assertThat(savedEmployee.getId()).isGreaterThan(0);
