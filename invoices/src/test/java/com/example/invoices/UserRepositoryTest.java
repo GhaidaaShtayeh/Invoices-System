@@ -39,7 +39,7 @@ public class UserRepositoryTest {
 
 
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        Employee newEmployee = new Employee(22222,"test10","test002",role,"nam@codejava.net","00501","Palestine",encodedPassword);
+        Employee newEmployee = new Employee(22225552,"test10","test002",role,"nam@test.net","55555","Palestine",encodedPassword);
         Employee savedEmployee = employeeRepository.save(newEmployee);
         assertThat(savedEmployee).isNotNull();
         assertThat(savedEmployee.getId()).isGreaterThan(0);

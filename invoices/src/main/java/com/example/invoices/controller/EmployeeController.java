@@ -26,7 +26,6 @@ public class EmployeeController {
 	//@RolesAllowed({ "USER" })
 	@PostMapping("/save")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
-
 		Employee employee1 = employeeService.saveEmployee(new Employee(employee));
 		if (employee1.getId() > 0)
 			return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);
