@@ -1,5 +1,6 @@
 package com.example.invoices.service;
 
+import com.example.invoices.dto.InvoiceHistoryDTO;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.InvoiceHistory;
 

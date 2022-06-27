@@ -23,7 +23,6 @@ public class Employee implements UserDetails {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -55,7 +54,7 @@ public class Employee implements UserDetails {
         this.password = password;
         this.isDeleted = false;
     }
-    public Employee(EmployeeDTO employee) {
+    /*public Employee(EmployeeDTO employee) {
         this.setEmail(employee.getEmail());
         this.setSerialNumber(employee.getSerialNumber());
         this.setPassword(employee.getPassword());
@@ -65,7 +64,7 @@ public class Employee implements UserDetails {
         this.setMobileNumber(employee.getMobileNumber());
         this.setCountry(employee.getCountry());
         this.isDeleted = false;
-    }
+    }*/
     public int getId() {
         return this.id;
     }

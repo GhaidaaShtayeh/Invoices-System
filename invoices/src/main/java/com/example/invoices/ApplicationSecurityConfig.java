@@ -54,9 +54,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.authorizeRequests()
-        .antMatchers("/employee/save").hasRole("SUPER_USER")
+        .antMatchers("/employee/save").permitAll()
         .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER","AUDITOR", "USER")
         .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
 
@@ -65,7 +64,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/invoice/viewList").permitAll()
                 .antMatchers("/invoice/save").permitAll()
                 .antMatchers("/invoice/update/{id}").permitAll()
-                .antMatchers("/customer/save").permitAll()
+                .antMatchers("/customer/save").hasRole("SUPER_USER")
 
                 .anyRequest().authenticated();
         http.exceptionHandling()

@@ -9,7 +9,10 @@ public class InvoiceDTO {
     private long serialNumber;
     private String status;
     private Timestamp createdDate;
+    private long customerSerialNumber;
+    private long employeeSerialNumber;
     private boolean isDeleted;
+
 
 
     public int getId() {
@@ -42,6 +45,18 @@ public class InvoiceDTO {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public long getCustomerSerialNumber() {
+        return customerSerialNumber;
+    }
+
+    public long getEmployeeSerialNumber() {
+        return employeeSerialNumber;
+    }
+
+    public void setCustomerSerialNumber(long customerSerialNumber) {
+        this.customerSerialNumber = customerSerialNumber;
     }
 
     public boolean isDeleted() {

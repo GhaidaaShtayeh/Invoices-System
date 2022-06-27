@@ -9,13 +9,10 @@ import java.util.Collection;
 
 @Data
 public class EmployeeDTO {
-
-
-    private int id;
     private long serialNumber;
     private String firstName;
     private String lastName;
-    private Role role;
+    private int roleId ;
     private String email;
     private String mobileNumber;
     private String country;
@@ -23,14 +20,13 @@ public class EmployeeDTO {
     private boolean isDeleted;
 
 
-    public EmployeeDTO(int id, long serialNumber, String firstName, String lastName, Role role, String email,
+    public EmployeeDTO( long serialNumber, String firstName, String lastName, int role, String email,
                        String mobileNumber, String country, String password, boolean isDeleted) {
         super();
-        this.id = id;
         this.serialNumber = serialNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
+        this.roleId = role;
         this.email = email;
         this.mobileNumber = mobileNumber;
         this.country = country;
@@ -41,18 +37,14 @@ public class EmployeeDTO {
     public EmployeeDTO() {
         super();
     }
-
-    public void setId(int parseInt) {
-        this.id = parseInt;
-    }
     public String getFirstName() {
         return firstName;
     }
     public String getLastName() {
         return lastName;
     }
-    public Role getRole() {
-        return role;
+    public int getRoleId() {
+        return roleId;
     }
     public String getCountry() {
         return country;
@@ -63,15 +55,12 @@ public class EmployeeDTO {
     public String getPassword() {
         return password;
     }
-
     public long getSerialNumber() {
         return serialNumber;
     }
-
     public String getMobileNumber() {
         return mobileNumber;
     }
-
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -81,8 +70,8 @@ public class EmployeeDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(int role) {
+        this.roleId = role;
     }
     public void setCountry(String country) {
         this.country = country;

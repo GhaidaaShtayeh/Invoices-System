@@ -13,17 +13,22 @@ public class InvoiceHistory {
     private Timestamp updatedDate;
     @Transient
     @Column(name = "invoice_history")
-    private InvoiceItem invoiceHistory;
+    private Invoice invoiceHistory;
     @ManyToOne
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    public InvoiceItem getInvoiceHistory() {
-        return invoiceHistory;
+
+    public InvoiceHistory() {
     }
-    public void setInvoiceHistory(InvoiceItem invoiceHistory) {
-        this.invoiceHistory = invoiceHistory;
-    }
+
+    public InvoiceHistory(Timestamp updatedDate, Invoice invoiceHistory, Employee employee){
+    this.updatedDate = updatedDate;
+    this.invoice = invoiceHistory;
+    this.invoiceHistory = invoiceHistory;
+    this.employee = employee;
+}
+
 }

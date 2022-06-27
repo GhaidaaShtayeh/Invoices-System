@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 
 public interface CustomerService {
 
-	public Customer addCustomer(Customer customer);
+	public Customer addCustomer(Object customer);
 
 	public Customer getCustomer(int customerId);
 

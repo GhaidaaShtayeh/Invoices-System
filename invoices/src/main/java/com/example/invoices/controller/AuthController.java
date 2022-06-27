@@ -26,6 +26,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtTokenUtil jwtUtil;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {

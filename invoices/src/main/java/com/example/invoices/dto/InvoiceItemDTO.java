@@ -11,8 +11,8 @@ import javax.persistence.ManyToOne;
 public class InvoiceItemDTO {
     private int id;
     private int quantity;
-    private Invoice invoice;
-    private Item item;
+    private long invoiceSerialNumber;
+    private long itemSerialNumber;
 
     public int getId() {
         return id;
@@ -26,20 +26,12 @@ public class InvoiceItemDTO {
         return quantity;
     }
 
-    public Invoice getInvoice() {
-        return invoice;
+    public long getInvoiceSerialNumber() {
+        return invoiceSerialNumber;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
+    public long getItemSerialNumber() {
+        return itemSerialNumber;
     }
 
     public void setQuantity(int quantity) {

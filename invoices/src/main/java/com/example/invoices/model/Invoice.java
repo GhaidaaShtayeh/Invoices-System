@@ -1,7 +1,6 @@
 package com.example.invoices.model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,12 +21,13 @@ public class Invoice {
     @Column(name = "is_deleted")
     private boolean isDeleted;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "customer_id")
     private Customer customer;
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    @OneToMany
+    @OneToMany()
     private Set<InvoiceHistory> invoiceHistories;
 
   /*  @ManyToMany()
@@ -41,11 +41,14 @@ public class Invoice {
     @OneToMany (mappedBy = "invoice")
     private Set <InvoiceItem> quantity;
 
-    public Invoice(long serialNumber, String status, Timestamp createdDate) {
+    public Invoice(long serialNumber, String status, Timestamp createdDate, Employee employee , Customer customer)
+    {
         this.serialNumber = serialNumber;
         this.status = status;
         this.createdDate = createdDate;
         this.isDeleted = false;
+        this.employee=employee;
+        this.customer=customer;
     }
     public Invoice(){}
     public int getId() {
@@ -96,10 +99,7 @@ public class Invoice {
     public void setInvoiceHistories(Set<InvoiceHistory> invoiceHistories) {
         this.invoiceHistories = invoiceHistories;
     }
-/*    public Set<Item> getItems() {
-        return items;
+    public int getEmployeeId(){
+        return employee.getId();
     }
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }*/
 }
