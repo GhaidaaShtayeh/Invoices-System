@@ -25,7 +25,7 @@ public class Customer {
     private boolean isDeleted;
 
 
-    @OneToMany
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="customer")
     private Set <Invoice> invoices;
 
     public Customer(){}

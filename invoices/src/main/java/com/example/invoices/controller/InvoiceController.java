@@ -79,13 +79,13 @@ public class InvoiceController {
     public ResponseEntity<Invoice> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
     try{
         Invoice newInvoice = invoiceService.updateInvoice(id, invoice);
-    System.out.println("update $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    Date updatedDate = new Date();
-    InvoiceHistoryDTO invoiceHistoryDTO = new InvoiceHistoryDTO(new Timestamp(updatedDate.getTime()),newInvoice,newInvoice.getId(), newInvoice.getEmployeeId());
-    System.out.println("histo1 ###############################################");
-    invoicesHistoryController.addHistory(invoiceHistoryDTO);
-    System.out.println("affffffffffffffffffffffffffffffffffffffffffffffffffff");
-    return new ResponseEntity<Invoice>(newInvoice, HttpStatus.OK);
+        System.out.println("update $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        Date updatedDate = new Date();
+        InvoiceHistoryDTO invoiceHistoryDTO = new InvoiceHistoryDTO(new Timestamp(updatedDate.getTime()),newInvoice,newInvoice.getId(), newInvoice.getEmployeeId());
+        System.out.println("histo1 ###############################################");
+        invoicesHistoryController.addHistory(invoiceHistoryDTO);
+        System.out.println("affffffffffffffffffffffffffffffffffffffffffffffffffff");
+        return new ResponseEntity<Invoice>(newInvoice, HttpStatus.OK);
     }
     catch(Exception exception){
         System.out.println(exception.getMessage());

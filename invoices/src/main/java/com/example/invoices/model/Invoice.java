@@ -27,17 +27,8 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-    @OneToMany()
-    private Set<InvoiceHistory> invoiceHistories;
-
-  /*  @ManyToMany()
-    @JoinTable(
-            name = "invoice_item",
-            joinColumns = @JoinColumn(name = "item_id "),
-            inverseJoinColumns = @JoinColumn(name = "invoice_id ")
-    )
-    private Set<Item> items;*/
-
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="invoice")
+    private Set <InvoiceHistory> invoiceHistories;
     @OneToMany (mappedBy = "invoice")
     private Set <InvoiceItem> quantity;
 
@@ -102,4 +93,5 @@ public class Invoice {
     public int getEmployeeId(){
         return employee.getId();
     }
+
 }

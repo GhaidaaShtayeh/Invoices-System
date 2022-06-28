@@ -58,7 +58,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/employee/save").permitAll()
         .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER","AUDITOR", "USER")
         .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
-
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/invoice/viewList").permitAll()

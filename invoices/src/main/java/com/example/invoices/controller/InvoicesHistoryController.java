@@ -29,10 +29,9 @@ public class InvoicesHistoryController {
     @PostMapping("/save")
     public ResponseEntity<InvoiceHistory> addHistory(@RequestBody InvoiceHistoryDTO invoice) {
         try {
-            Invoice invoice1= invoiceRepository.findBySerialNumber(invoice.getInvoiceSerialNumber());
-      //      Employee employee = employeeRepository.findBySerialNumber(invoice.getEmployeeSerialNumber());
             InvoiceHistory newInvoice = invoiceHistoryService
-                    .saveInvoiceHistory(new InvoiceHistory(invoice.getUpdatedDate(), invoice1, invoice.getInvoiceInfo().getEmployee()));
+                    .saveInvoiceHistory(new InvoiceHistory(invoice.getUpdatedDate(), invoice.getInvoiceInfo(), invoice.getInvoiceInfo().toString(), invoice.getInvoiceInfo().getEmployee()));
+            System.out.println(newInvoice.getInvoiceHistory()+"--------------------------------------------");
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

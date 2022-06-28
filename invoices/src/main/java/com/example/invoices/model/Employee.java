@@ -32,9 +32,9 @@ public class Employee implements UserDetails {
     private String password;
     private boolean isDeleted;
 
-    @OneToMany
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="employee")
     private Set<Invoice> invoices;
-    @OneToMany
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="employee")
     private Set<InvoiceHistory> invoiceHistories;
 
 
