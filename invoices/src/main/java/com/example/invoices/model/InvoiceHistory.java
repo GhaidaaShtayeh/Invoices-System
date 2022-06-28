@@ -22,6 +22,7 @@ public class InvoiceHistory {
     private int id;
     @Column(name = "updated_date")
     private Timestamp updatedDate;
+
     @Column(name = "invoice_obj")
     private String invoiceHistory;
     @ManyToOne

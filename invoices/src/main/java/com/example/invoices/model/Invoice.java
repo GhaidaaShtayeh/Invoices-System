@@ -93,5 +93,8 @@ public class Invoice {
     public int getEmployeeId(){
         return employee.getId();
     }
+    public String toString() {
+        return (this.getSerialNumber() + " : serial .. and Employee Id :  "+this.getEmployeeId() + "and "  + this.getStatus()+" is the status");
+    }
 
 }

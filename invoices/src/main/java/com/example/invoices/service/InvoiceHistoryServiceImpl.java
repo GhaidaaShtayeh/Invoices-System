@@ -4,9 +4,10 @@ import com.example.invoices.dto.InvoiceHistoryDTO;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.InvoiceHistory;
 import com.example.invoices.repository.InvoiceHistoryRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+@Data
 @Service
 public class InvoiceHistoryServiceImpl implements InvoiceHistoryService {
     @Autowired
