@@ -56,14 +56,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
         .antMatchers("/employee/save").permitAll()
-        .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER","AUDITOR", "USER")
-        .antMatchers("/customer/getCustomersByPageLimit").hasRole("SUPER_USER, AUDITOR")
+        .antMatchers("/customer/viewList").permitAll()
+        .antMatchers("/customer/deleteCustomer/{customerId}").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/invoice/viewList").permitAll()
                 .antMatchers("/invoice/save").permitAll()
+                .antMatchers("/invoice/dashboard").permitAll()
                 .antMatchers("/invoice/update/{id}").permitAll()
-                .antMatchers("/customer/save").hasRole("SUPER_USER")
+                .antMatchers("/customer/save").permitAll()
+                .antMatchers("/getCustomer/{invoiceId}").permitAll()
+                .antMatchers("/item/viewList").permitAll()
+                .antMatchers("/item/save").permitAll()
+                .antMatchers("/invoice/get-invoice/{serialNumber}").permitAll()
+                ///deleteInvoice/{invoiceId}
+                .antMatchers("/invoice/deleteInvoice/{invoiceId}").permitAll()
+
 
                 .anyRequest().authenticated();
         http.exceptionHandling()

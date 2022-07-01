@@ -29,6 +29,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
+@CrossOrigin("http://localhost:4200/")
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
@@ -46,12 +47,14 @@ public class InvoiceController {
     InvoicesHistoryController invoicesHistoryController;
 
     @GetMapping("/dashboard")
+    @CrossOrigin("http://localhost:4200/")
     public List<Invoice> getAll (@RequestParam String field, @RequestParam int page, @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, field);
         return invoiceRepository.findAll(pageable).toList();
     }
 
     @GetMapping("/viewList")
+    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<List<Invoice>> getAllInvoices() {
         List<Invoice> invoices = new ArrayList<>();
         invoices = invoiceService.getInvoice();
@@ -62,12 +65,14 @@ public class InvoiceController {
     }
 
     @PostMapping("/save")
+    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> addInvoice(@RequestBody InvoiceDTO invoice) {
     try {
             Customer customer= customerRepository.findBySerialNumber(invoice.getCustomerSerialNumber());
             Employee employee = employeeRepository.findBySerialNumber(invoice.getEmployeeSerialNumber());
-            Invoice newInvoice = invoiceService
-                    .saveInvoice(new Invoice(invoice.getSerialNumber(), invoice.getStatus(), invoice.getCreatedDate(),employee,customer));
+        Date updatedDate = new Date();
+        Invoice newInvoice = invoiceService
+                    .saveInvoice(new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer));
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -76,15 +81,13 @@ public class InvoiceController {
     }
 
     @PutMapping("/update/{id}")
+    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
     try{
         Invoice newInvoice = invoiceService.updateInvoice(id, invoice);
-       // System.out.println("update $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         Date updatedDate = new Date();
         InvoiceHistoryDTO invoiceHistoryDTO = new InvoiceHistoryDTO(new Timestamp(updatedDate.getTime()),newInvoice,newInvoice.getId(), newInvoice.getEmployeeId());
-      //  System.out.println("histo1 ###############################################");
         invoicesHistoryController.addHistory(invoiceHistoryDTO);
-      //  System.out.println("affffffffffffffffffffffffffffffffffffffffffffffffffff");
         return new ResponseEntity<Invoice>(newInvoice, HttpStatus.OK);
     }
     catch(Exception exception){
@@ -94,7 +97,7 @@ public class InvoiceController {
         }
     }
 
-    @GetMapping("/getCustomer/{customerId}")
+    @GetMapping("/getCustomer/{invoiceId}")
     public ResponseEntity<?> getCustomer(@PathVariable @RequestBody int invoiceId) {
         Optional<Invoice> invoiceData = Optional.ofNullable(invoiceService.getInvoice().get(invoiceId));
         if (invoiceData.isPresent()) {
@@ -105,8 +108,8 @@ public class InvoiceController {
     }
 
     @PutMapping("/deleteInvoice/{invoiceId}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable int invoiceId) {
-
+    @CrossOrigin("http://localhost:4200/")
+    public ResponseEntity<?> deleteCustomer(@PathVariable @RequestBody int invoiceId) {
         if (invoiceId > 0) {
             boolean deleteStatus = invoiceService.deleteInvoice(invoiceId);
             if (deleteStatus) {
@@ -117,6 +120,13 @@ public class InvoiceController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    @GetMapping("/get-invoice/{serialNumber}")
+    @CrossOrigin("http://localhost:4200/")
+    public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
+        Invoice invoice = invoiceService.getInvoice(serialNumber);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
 }

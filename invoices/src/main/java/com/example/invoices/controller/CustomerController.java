@@ -5,15 +5,7 @@ import com.example.invoices.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.slf4j.LoggerFactory;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
@@ -27,6 +19,7 @@ public class CustomerController {
     CustomerServiceImpl customerService;
 
     @GetMapping("/viewList")
+	@CrossOrigin("http://localhost:4200/")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 			List<Customer> customers = new ArrayList<>();
 			customers = customerService.getAllCustomers();
@@ -45,6 +38,7 @@ public class CustomerController {
     }
 
     @PostMapping("/save")
+	@CrossOrigin("http://localhost:4200/")
 		public ResponseEntity<Customer> addCustomer(@RequestBody CustomerDTO customer) {
 			try {
 				Customer newCustomer = customerService

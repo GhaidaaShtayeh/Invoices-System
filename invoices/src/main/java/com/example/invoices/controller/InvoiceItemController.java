@@ -66,7 +66,7 @@ public class InvoiceItemController {
     }
 
 
-    @PutMapping("/deleteInvoice/{invoiceId}")
+    /*@PutMapping("/deleteInvoice/{invoiceId}")
     public ResponseEntity<?> deleteCustomer(@PathVariable int invoiceId) {
 
         if (invoiceId > 0) {
@@ -80,5 +80,5 @@ public class InvoiceItemController {
 
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-
+*/
 }

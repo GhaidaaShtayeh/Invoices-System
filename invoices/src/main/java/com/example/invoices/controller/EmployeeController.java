@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.invoices.model.Employee;
 import com.example.invoices.service.EmployeeService;
@@ -31,6 +27,8 @@ public class EmployeeController {
 	RoleRepository roleRepository;
 
 	@PostMapping("/save")
+	@CrossOrigin("http://localhost:4200/")
+
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 		Role role = roleRepository.findById(employee.getRoleId());
 		Employee newEmployee = new Employee(employee.getSerialNumber(),employee.getFirstName(), employee.getLastName(),role,employee.getEmail(),employee.getMobileNumber(), employee.getCountry(), employee.getPassword());

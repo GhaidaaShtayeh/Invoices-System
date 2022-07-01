@@ -1,6 +1,7 @@
 package com.example.invoices.service;
 
 import com.example.invoices.dto.InvoiceItemDTO;
+import com.example.invoices.model.Invoice;
 import com.example.invoices.model.InvoiceItem;
 import com.example.invoices.repository.InvoiceItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ public class InvoiceItemServiceImpl implements  InvoiceItemService{
 
     }
 
-    @Override
+
+
+   /* @Override
     public boolean deleteInvoiceItem(int invoiceId) {
 
         try{
@@ -49,5 +52,5 @@ public class InvoiceItemServiceImpl implements  InvoiceItemService{
         }catch(Exception exception){
             return false;
         }
-    }
+    }*/
 }

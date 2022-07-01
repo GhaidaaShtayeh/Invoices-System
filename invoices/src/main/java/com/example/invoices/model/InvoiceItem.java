@@ -16,8 +16,6 @@ public class InvoiceItem {
     private int id;
     @Column(name = "quantity")
     private int quantity;
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
@@ -65,11 +63,5 @@ public class InvoiceItem {
         this.item = item;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
 }

@@ -32,12 +32,30 @@ public class Item {
     private Set <InvoiceItem> quantity;
 
     public Item(){}
-    public Item(long serialNumber, String name, int unitPrice, Timestamp craetedDate){
+    public Item(long serialNumber, String name, int unitPrice){
         this.serialNumber = serialNumber;
         this.name = name;
         this.unitPrice = unitPrice;
-        this.createdDate = craetedDate;
         this.isDeleted = false;
     }
 
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getUnitPrice() {
+        return unitPrice;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public Set<InvoiceItem> getQuantity() {
+        return quantity;
+    }
 }

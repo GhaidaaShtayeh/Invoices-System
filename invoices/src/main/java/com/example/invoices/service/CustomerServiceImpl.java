@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 	public List<Customer> getAllCustomers() {
-		List<Customer> customers =  cutomerRepository.findAll();
+		List<Customer> customers =  cutomerRepository.findAllByIsDeletedIsFalse();
 		return customers;
 	}
 
@@ -32,7 +32,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer getCustomer(int customerId) {
-		System.out.println("************************Id:" + customerId);
 		return cutomerRepository.findById(customerId).get();
 	}
 

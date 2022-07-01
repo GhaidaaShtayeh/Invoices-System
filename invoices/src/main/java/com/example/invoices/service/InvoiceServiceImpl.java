@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,9 +31,10 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public Invoice updateInvoice(int invoiceId, InvoiceDTO invoiceDetails) {
+        Date updatedDate = new Date();
         Invoice invoice = invoiceRepository.findById(invoiceId).get();
         invoice.setStatus(invoiceDetails.getStatus());
-        invoice.setCreatedDate(invoiceDetails.getCreatedDate());
+        invoice.setCreatedDate(new Timestamp(updatedDate.getTime()));
         invoice.setSerialNumber(invoiceDetails.getSerialNumber());
         return invoiceRepository.save(invoice);
     }
@@ -47,5 +50,10 @@ public class InvoiceServiceImpl implements  InvoiceService {
             return false;
         }
 
+    }
+    @Override
+    public Invoice getInvoice(long serialNumber) {
+        Invoice invoice = invoiceRepository.findBySerialNumber(serialNumber);
+        return invoice;
     }
 }

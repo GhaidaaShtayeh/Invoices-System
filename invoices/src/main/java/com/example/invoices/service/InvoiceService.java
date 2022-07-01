@@ -12,4 +12,6 @@ public interface InvoiceService {
     public List<Invoice> getInvoice();
     public Invoice updateInvoice(int invoiceId, InvoiceDTO invoiceDetails);
     public boolean deleteInvoice(int invoiceId);
+    public Invoice getInvoice(long serialNumber);
+
 }
