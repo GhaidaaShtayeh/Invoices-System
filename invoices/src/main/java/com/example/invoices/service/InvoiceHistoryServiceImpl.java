@@ -2,11 +2,15 @@ package com.example.invoices.service;
 
 import com.example.invoices.dto.InvoiceHistoryDTO;
 import com.example.invoices.model.Customer;
+import com.example.invoices.model.Invoice;
 import com.example.invoices.model.InvoiceHistory;
 import com.example.invoices.repository.InvoiceHistoryRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Data
 @Service
 public class InvoiceHistoryServiceImpl implements InvoiceHistoryService {
@@ -20,7 +24,9 @@ public class InvoiceHistoryServiceImpl implements InvoiceHistoryService {
     }
 
     @Override
-    public InvoiceHistory getInvoiceHistory(InvoiceHistory invoiceHistory) {
-        return null;
+    public List<InvoiceHistory> getInvoice(long serialNumber) {
+        List<InvoiceHistory> invoice = invoiceHistoryRepository.findAllByInvoiceSerialNumber(serialNumber);
+        return invoice;
     }
+
 }

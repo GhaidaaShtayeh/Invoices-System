@@ -25,7 +25,7 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public List<Invoice>  getInvoice() {
-        List<Invoice> customers =  invoiceRepository.findAll();
+        List<Invoice> customers =  invoiceRepository.getAllInvoices();
         return customers;
     }
 

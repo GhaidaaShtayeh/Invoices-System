@@ -12,10 +12,9 @@ import com.example.invoices.service.InvoiceHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/invoicehistory")
@@ -26,16 +25,24 @@ public class InvoicesHistoryController {
     InvoiceRepository invoiceRepository;
     @Autowired
     InvoiceHistoryService invoiceHistoryService;
+
+
     @PostMapping("/save")
     public ResponseEntity<InvoiceHistory> addHistory(@RequestBody InvoiceHistoryDTO invoice) {
         try {
             InvoiceHistory newInvoice = invoiceHistoryService
                     .saveInvoiceHistory(new InvoiceHistory(invoice.getUpdatedDate(), invoice.getInvoiceInfo(), invoice.getInvoiceInfo().toString(), invoice.getInvoiceInfo().getEmployee()));
-            System.out.println(newInvoice.getInvoiceHistory()+"--------------------------------------------");
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-
         }
+    }
+
+
+    @GetMapping("/get-invoice-history/{serialNumber}")
+    @CrossOrigin("http://localhost:4200/")
+    public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
+        List<InvoiceHistory> invoice = invoiceHistoryService.getInvoice(serialNumber);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 }

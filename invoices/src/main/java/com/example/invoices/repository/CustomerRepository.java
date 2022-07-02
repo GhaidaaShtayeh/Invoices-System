@@ -7,7 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    List<Customer> findAllByIsDeletedIsFalse();
+  //  List<Customer> findAllByDeletedIsFalse();
 
     Customer findBySerialNumber(long serialNumber);
+    @Query(
+            value = "select * from Customer where is_deleted = false",
+            nativeQuery = true)
+    List<Customer> getAllCustomers();
 }

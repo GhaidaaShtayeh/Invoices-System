@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 	public List<Customer> getAllCustomers() {
-		List<Customer> customers =  cutomerRepository.findAllByIsDeletedIsFalse();
+		List<Customer> customers =  cutomerRepository.getAllCustomers();
 		return customers;
 	}
 

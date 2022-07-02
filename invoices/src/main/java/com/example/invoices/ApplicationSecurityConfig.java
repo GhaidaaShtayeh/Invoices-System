@@ -69,9 +69,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/item/viewList").permitAll()
                 .antMatchers("/item/save").permitAll()
                 .antMatchers("/invoice/get-invoice/{serialNumber}").permitAll()
-                ///deleteInvoice/{invoiceId}
                 .antMatchers("/invoice/deleteInvoice/{invoiceId}").permitAll()
-
+                .antMatchers("/invoicehistory/get-invoice-history/{serialNumber}").permitAll()
 
                 .anyRequest().authenticated();
         http.exceptionHandling()

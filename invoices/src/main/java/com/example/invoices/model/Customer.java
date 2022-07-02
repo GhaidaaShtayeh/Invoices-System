@@ -3,11 +3,14 @@ package com.example.invoices.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 @Data
 @Entity
 @Table(name = "customer")
-public class Customer {
+public class Customer implements Serializable {
+    private final static long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
@@ -22,7 +25,15 @@ public class Customer {
     @Column(name = "mobile_number")
     private String mobileNumber;
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
 
     @OneToMany(fetch=FetchType.EAGER, mappedBy="customer")
@@ -35,7 +46,7 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.mobileNumber = mobileNumber;
-        this.isDeleted = false;
+        this.deleted = false;
     }
     public int getId() {
         return this.id;
@@ -83,10 +94,5 @@ public class Customer {
 	public void setInvoices(Set<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
+
 }

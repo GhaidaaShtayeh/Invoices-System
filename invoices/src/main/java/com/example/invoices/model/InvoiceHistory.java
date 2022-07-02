@@ -1,5 +1,6 @@
 package com.example.invoices.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.IntArrayType;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -26,6 +27,7 @@ public class InvoiceHistory {
     @Column(name = "invoice_obj")
     private String invoiceHistory;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
     @ManyToOne
@@ -41,6 +43,18 @@ public class InvoiceHistory {
     this.invoiceHistory = invoiceHistoryStr;
     this.employee = employee;
 }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
 
     public String getInvoiceHistory() {
         return invoiceHistory;
