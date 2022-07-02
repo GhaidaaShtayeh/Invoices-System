@@ -24,9 +24,9 @@ public class InvoiceItemServiceImpl implements  InvoiceItemService{
     }
 
     @Override
-    public List<InvoiceItem> getAllInvoiceItem() {
+    public List<InvoiceItem> getAllInvoiceItem(long serialNumber) {
 
-        List<InvoiceItem> invoices =  invoiceRepository.findAll();
+        List<InvoiceItem> invoices =  invoiceRepository.findAllByInvoiceSerialNumber(serialNumber);
         return invoices;
     }
 

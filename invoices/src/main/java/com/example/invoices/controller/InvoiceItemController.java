@@ -31,10 +31,11 @@ public class InvoiceItemController {
     @Autowired
     InvoiceRepository invoiceRepository;
 
-    @GetMapping("/viewList")
-    public ResponseEntity<List<InvoiceItem>> getAllCustomers() {
+    @GetMapping("/viewList/{serialNumber}")
+    @CrossOrigin("http://localhost:4200/")
+    public ResponseEntity<List<InvoiceItem>> getAllCustomers(@PathVariable long serialNumber) {
         List<InvoiceItem> invoices = new ArrayList<>();
-        invoices = invoiceService.getAllInvoiceItem();
+        invoices = invoiceService.getAllInvoiceItem(serialNumber);
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -31,6 +31,9 @@ public class InvoiceItem {
         this.item=item;
     }
 
+    public InvoiceItem(){
+
+    }
     public int getId() {
         return id;
     }

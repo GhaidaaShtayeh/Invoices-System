@@ -14,6 +14,9 @@ public class InvoiceItemDTO {
     private long invoiceSerialNumber;
     private long itemSerialNumber;
 
+    public InvoiceItemDTO(){
+
+    }
     public int getId() {
         return id;
     }
@@ -37,4 +40,5 @@ public class InvoiceItemDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }
