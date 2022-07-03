@@ -13,6 +13,7 @@ import com.example.invoices.repository.InvoiceRepository;
 import com.example.invoices.service.CustomerServiceImpl;
 import com.example.invoices.service.InvoiceHistoryService;
 import com.example.invoices.service.InvoiceServiceImpl;
+import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,13 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
+
+    private SetHeaders headers;
+
+    public InvoiceController(){
+        headers = new SetHeaders();
+    }
+
     @Autowired
     InvoiceServiceImpl invoiceService;
     @Autowired
@@ -107,7 +115,7 @@ public class InvoiceController {
         if (invoiceId > 0) {
             boolean deleteStatus = invoiceService.deleteInvoice(invoiceId);
             if (deleteStatus) {
-                return new ResponseEntity<String>("invoice deleted succeessfully.", HttpStatus.OK);
+                return new ResponseEntity<String>("invoice deleted succeessfully.", headers.Headers(), HttpStatus.OK);
             }
         } else {
             return new ResponseEntity<String>("invoice not deleted .", HttpStatus.NOT_FOUND);
