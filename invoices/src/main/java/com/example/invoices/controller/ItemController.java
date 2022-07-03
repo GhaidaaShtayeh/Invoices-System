@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/item")
 public class ItemController {
@@ -25,7 +25,6 @@ public class ItemController {
     ItemService itemService;
 
     @GetMapping("/viewList")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<List<Item>> getAllItems() {
         List<Item> items = new ArrayList<>();
         items = itemService.getAllItem();
@@ -39,7 +38,6 @@ public class ItemController {
 
 
     @PostMapping("/save")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Item> addItem(@RequestBody ItemDTO item) {
         try {
             Item newCustomer = itemService

@@ -32,7 +32,7 @@ import java.util.*;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
-@CrossOrigin("http://localhost:4200/")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
@@ -46,7 +46,6 @@ public class InvoiceController {
     @Autowired
     EmployeeRepository employeeRepository;
     @GetMapping("/dashboard")
-    @CrossOrigin("http://localhost:4200/")
     public List<Invoice> getAll (@RequestParam String field, @RequestParam int page, @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, field);
         LOGGER.info(" page pagination calling ");
@@ -54,10 +53,8 @@ public class InvoiceController {
     }
 
     @GetMapping("/viewList")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<List<Invoice>> getAllInvoices() {
-        List<Invoice> invoices = new ArrayList<>();
-        invoices = invoiceService.getInvoice();
+        List<Invoice> invoices = invoiceService.getInvoice();
         if (invoices.isEmpty()) {
             LOGGER.error(" list are empty  ");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -67,7 +64,6 @@ public class InvoiceController {
     }
 
     @PostMapping("/save")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> addInvoice(@RequestBody InvoiceDTO invoice) {
     try {
         Invoice newInvoice = invoiceService.saveInvoice(invoice);
@@ -81,7 +77,6 @@ public class InvoiceController {
     }
 
     @PutMapping("/update/{id}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
     try{
         Invoice newInvoice = invoiceService.updateInvoice(id, invoice);
@@ -108,7 +103,6 @@ public class InvoiceController {
     }
 
     @PutMapping("/deleteInvoice/{invoiceId}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> deleteCustomer(@PathVariable @RequestBody int invoiceId) {
         if (invoiceId > 0) {
             boolean deleteStatus = invoiceService.deleteInvoice(invoiceId);
@@ -122,7 +116,6 @@ public class InvoiceController {
     }
 
     @GetMapping("/get-invoice/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
         try{
             Invoice invoice = invoiceService.getInvoice(serialNumber);
@@ -130,11 +123,9 @@ public class InvoiceController {
         }catch(InvoiceNotFoundException invoiceNotFoundException){
             return new ResponseEntity<String>("invoice not found .", HttpStatus.NOT_FOUND);
         }
-
     }
 
     @GetMapping("/getInvoicesEmployee/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoiceByEmployee(@PathVariable long serialNumber){
         try{
             Employee employee = employeeRepository.findBySerialNumber(serialNumber);

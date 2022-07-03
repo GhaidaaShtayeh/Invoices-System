@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -27,8 +29,6 @@ public class EmployeeController {
 	RoleRepository roleRepository;
 
 	@PostMapping("/save")
-	@CrossOrigin("http://localhost:4200/")
-
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 		Employee employee1 = employeeService.saveEmployee(employee);
 		if (employee1.getId() > 0){

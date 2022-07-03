@@ -11,7 +11,7 @@ import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.service.CustomerServiceImpl;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -19,7 +19,6 @@ public class CustomerController {
     CustomerServiceImpl customerService;
 
     @GetMapping("/viewList")
-	@CrossOrigin("http://localhost:4200/")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 			List<Customer> customers = new ArrayList<>();
 			customers = customerService.getAllCustomers();
@@ -27,7 +26,6 @@ public class CustomerController {
 	}
 
     @PostMapping("/save")
-	@CrossOrigin("http://localhost:4200/")
 		public ResponseEntity<Customer> addCustomer(@RequestBody CustomerDTO customer) {
 		try {
 				Customer newCustomer = customerService.addCustomer(customer);

@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoicehistory")
 public class InvoicesHistoryController {
@@ -44,7 +45,6 @@ public class InvoicesHistoryController {
 
 
     @GetMapping("/get-invoice-history/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
         List<InvoiceHistory> invoice = invoiceHistoryService.getInvoice(serialNumber);
         return new ResponseEntity<>(invoice, HttpStatus.OK);

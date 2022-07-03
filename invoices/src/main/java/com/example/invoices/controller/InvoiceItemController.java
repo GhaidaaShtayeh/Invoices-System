@@ -11,6 +11,7 @@ import com.example.invoices.repository.ItemRepository;
 import com.example.invoices.service.InvoiceItemService;
 import com.example.invoices.service.InvoiceItemServiceImpl;
 import com.example.invoices.service.InvoiceServiceImpl;
+import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoiceItem")
 public class InvoiceItemController {
+
+    private SetHeaders headers;
+
+    public InvoiceItemController(){
+        headers = new SetHeaders();
+    }
 
     @Autowired
     InvoiceItemServiceImpl invoiceService;
@@ -32,7 +41,6 @@ public class InvoiceItemController {
     InvoiceRepository invoiceRepository;
 
     @GetMapping("/viewList/{serialNumber}")
-    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<List<InvoiceItem>> getAllCustomers(@PathVariable long serialNumber) {
         List<InvoiceItem> invoices = new ArrayList<>();
         invoices = invoiceService.getAllInvoiceItem(serialNumber);
@@ -43,14 +51,13 @@ public class InvoiceItemController {
     }
 
     @PostMapping("/save")
-    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<InvoiceItem> addInvoice(@RequestBody InvoiceItemDTO invoiceItem) {
         try {
             Invoice invoice = invoiceRepository.findBySerialNumber(invoiceItem.getInvoiceSerialNumber());
             Item item = itemRepository.findBySerialNumber(invoiceItem.getItemSerialNumber());
             InvoiceItem newInvoice = invoiceService
                     .saveInvoiceItem(new InvoiceItem(invoiceItem.getQuantity(),invoice,item));
-            return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
+            return new ResponseEntity<>(newInvoice, headers.Headers() ,HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -58,12 +65,11 @@ public class InvoiceItemController {
 
 
     @PutMapping("/updateQuantity/{id}")
-    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<InvoiceItem> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceItemDTO invoice) {
 
         InvoiceItem newInvoice = invoiceService.updateInvoiceItem(id, invoice);
 
-        return new ResponseEntity<InvoiceItem>(newInvoice, HttpStatus.OK);
+        return new ResponseEntity<InvoiceItem>(newInvoice, headers.Headers(), HttpStatus.OK);
     }
 
 
