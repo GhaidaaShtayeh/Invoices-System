@@ -1,16 +1,21 @@
 package com.example.invoices.service;
 
 import com.example.invoices.dto.CustomerDTO;
+import com.example.invoices.exception.EmptyListException;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
+
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -20,14 +25,22 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers =  cutomerRepository.getAllCustomers();
+		if (customers.isEmpty()) {
+			LOGGER.error("no content in customers ");
+			throw new EmptyListException("customers list are empty");
+		}
+		LOGGER.info("calling list of customers");
 		return customers;
 	}
 
 	@Override
 	@Transactional
-	public Customer addCustomer(Object customer) {
-		Customer newCustomer = cutomerRepository.save((Customer) customer);
-		return newCustomer;
+	public Customer addCustomer(CustomerDTO customer) {
+		Customer newCustomer = null;
+			newCustomer = new Customer(customer.getSerialNumber(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getMobileNumber());
+			newCustomer = cutomerRepository.save(newCustomer);
+			return newCustomer;
+
 	}
 
 	@Override
@@ -60,11 +73,4 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
 
-	@Override
-	@Transactional
-	public Invoice updateCustomerInvoice(Invoice invoice, int id) {
-		// cutomerRepository.updatePrice(invoice, id);
-
-		return invoice;
-	}
 }

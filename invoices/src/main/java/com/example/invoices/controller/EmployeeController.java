@@ -30,9 +30,7 @@ public class EmployeeController {
 	@CrossOrigin("http://localhost:4200/")
 
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
-		Role role = roleRepository.findById(employee.getRoleId());
-		Employee newEmployee = new Employee(employee.getSerialNumber(),employee.getFirstName(), employee.getLastName(),role,employee.getEmail(),employee.getMobileNumber(), employee.getCountry(), employee.getPassword());
-		Employee employee1 = employeeService.saveEmployee(newEmployee);
+		Employee employee1 = employeeService.saveEmployee(employee);
 		if (employee1.getId() > 0){
 			LOGGER.info(" new user registered ");
 			return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);

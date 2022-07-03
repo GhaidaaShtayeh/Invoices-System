@@ -3,7 +3,9 @@ package com.example.invoices.service;
 import java.util.Optional;
 
 import com.example.invoices.dto.EmployeeDTO;
+import com.example.invoices.model.Role;
 import com.example.invoices.repository.EmployeeRepository;
+import com.example.invoices.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,12 +20,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	@Autowired
 	EmployeeRepository employeeRepository;
-	
+
+	@Autowired
+	RoleRepository roleRepository;
 	@Override
-	public Employee saveEmployee(Employee employee) {
-		    String encodedPassword = passwordEncoder.encode(employee.getPassword());
-	        employee.setPassword(encodedPassword);
-		return employeeRepository.save(employee);
+	public Employee saveEmployee(EmployeeDTO employee) {
+		Role role = roleRepository.findById(employee.getRoleId());
+		Employee newEmployee = new Employee(employee.getSerialNumber(),employee.getFirstName(), employee.getLastName(),role,employee.getEmail(),employee.getMobileNumber(), employee.getCountry(), employee.getPassword());
+		String encodedPassword = passwordEncoder.encode(newEmployee.getPassword());
+		newEmployee.setPassword(encodedPassword);
+		return employeeRepository.save(newEmployee);
 	}
 
 	@Override

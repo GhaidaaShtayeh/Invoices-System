@@ -1,7 +1,13 @@
 package com.example.invoices.service;
 
 import com.example.invoices.dto.InvoiceDTO;
+import com.example.invoices.exception.InvoiceAlreadyExistsException;
+import com.example.invoices.exception.InvoiceNotFoundException;
+import com.example.invoices.model.Customer;
+import com.example.invoices.model.Employee;
 import com.example.invoices.model.Invoice;
+import com.example.invoices.repository.CustomerRepository;
+import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +21,28 @@ import java.util.List;
 public class InvoiceServiceImpl implements  InvoiceService {
     @Autowired
     InvoiceRepository invoiceRepository ;
-
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
     @Override
     @Transactional
-    public Invoice saveInvoice(Invoice invoice) {
-        Invoice newInvoice = invoiceRepository.save(invoice);
+    public Invoice saveInvoice(InvoiceDTO invoice) {
+        Customer customer= customerRepository.findBySerialNumber(invoice.getCustomerSerialNumber());
+        Employee employee = employeeRepository.findBySerialNumber(invoice.getEmployeeSerialNumber());
+        Date updatedDate = new Date();
+        Invoice newInvoice = new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer);
+        if(invoiceRepository.existsById(invoice.getId())){
+            throw new InvoiceAlreadyExistsException();
+        }
+         newInvoice = invoiceRepository.save(newInvoice);
         return newInvoice;
     }
 
     @Override
     public List<Invoice>  getInvoice() {
-        List<Invoice> customers =  invoiceRepository.getAllInvoices();
-        return customers;
+        List<Invoice> invoices =  invoiceRepository.getAllInvoices();
+        return invoices;
     }
 
     @Override
@@ -53,7 +69,19 @@ public class InvoiceServiceImpl implements  InvoiceService {
     }
     @Override
     public Invoice getInvoice(long serialNumber) {
-        Invoice invoice = invoiceRepository.findBySerialNumber(serialNumber);
-        return invoice;
+        if(invoiceRepository.findBySerialNumber(serialNumber)==null){
+            throw new InvoiceNotFoundException();
+        }
+        else{
+            Invoice invoice = invoiceRepository.findBySerialNumber(serialNumber);
+            return invoice;
+        }
+
+    }
+
+    @Override
+    public List<Invoice> getAllInvoicesByEmpId(Employee employee) {
+        List<Invoice> invoices = invoiceRepository.findByEmployee(employee);
+        return invoices;
     }
 }

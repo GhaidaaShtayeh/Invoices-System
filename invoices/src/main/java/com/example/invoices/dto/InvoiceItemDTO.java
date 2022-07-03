@@ -13,7 +13,6 @@ public class InvoiceItemDTO {
     private int quantity;
     private long invoiceSerialNumber;
     private long itemSerialNumber;
-
     public InvoiceItemDTO(){
 
     }

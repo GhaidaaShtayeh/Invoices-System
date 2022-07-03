@@ -44,10 +44,4 @@ public class AuthController {
         }
     }
 
-    @Autowired
-    Test test;
-    @GetMapping("/login")
-    public void insertUserRec() {
-        test.testCreatEmployee();
-    }
 }

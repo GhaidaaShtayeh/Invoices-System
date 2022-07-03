@@ -32,7 +32,7 @@ public class InvoiceItemController {
     InvoiceRepository invoiceRepository;
 
     @GetMapping("/viewList/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
+    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<List<InvoiceItem>> getAllCustomers(@PathVariable long serialNumber) {
         List<InvoiceItem> invoices = new ArrayList<>();
         invoices = invoiceService.getAllInvoiceItem(serialNumber);
@@ -43,10 +43,9 @@ public class InvoiceItemController {
     }
 
     @PostMapping("/save")
+    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<InvoiceItem> addInvoice(@RequestBody InvoiceItemDTO invoiceItem) {
-
         try {
-
             Invoice invoice = invoiceRepository.findBySerialNumber(invoiceItem.getInvoiceSerialNumber());
             Item item = itemRepository.findBySerialNumber(invoiceItem.getItemSerialNumber());
             InvoiceItem newInvoice = invoiceService
@@ -59,6 +58,7 @@ public class InvoiceItemController {
 
 
     @PutMapping("/updateQuantity/{id}")
+    @CrossOrigin("http://localhost:4200")
     public ResponseEntity<InvoiceItem> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceItemDTO invoice) {
 
         InvoiceItem newInvoice = invoiceService.updateInvoiceItem(id, invoice);

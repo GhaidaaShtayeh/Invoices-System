@@ -3,6 +3,7 @@ package com.example.invoices.controller;
 import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.dto.InvoiceDTO;
 import com.example.invoices.dto.InvoiceHistoryDTO;
+import com.example.invoices.exception.InvoiceNotFoundException;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.Invoice;
@@ -29,6 +30,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
+
 @CrossOrigin("http://localhost:4200/")
 @RestController
 @RequestMapping("/invoice")
@@ -38,18 +41,15 @@ public class InvoiceController {
     @Autowired
     InvoiceRepository invoiceRepository;
     @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    CustomerRepository customerRepository;
-    @Autowired
-    InvoiceHistoryService invoiceHistoryService;
-    @Autowired
     InvoicesHistoryController invoicesHistoryController;
 
+    @Autowired
+    EmployeeRepository employeeRepository;
     @GetMapping("/dashboard")
     @CrossOrigin("http://localhost:4200/")
     public List<Invoice> getAll (@RequestParam String field, @RequestParam int page, @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, field);
+        LOGGER.info(" page pagination calling ");
         return invoiceRepository.findAll(pageable).toList();
     }
 
@@ -59,8 +59,10 @@ public class InvoiceController {
         List<Invoice> invoices = new ArrayList<>();
         invoices = invoiceService.getInvoice();
         if (invoices.isEmpty()) {
+            LOGGER.error(" list are empty  ");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        LOGGER.info(" list of invoices displayed ");
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
@@ -68,26 +70,24 @@ public class InvoiceController {
     @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> addInvoice(@RequestBody InvoiceDTO invoice) {
     try {
-            Customer customer= customerRepository.findBySerialNumber(invoice.getCustomerSerialNumber());
-            Employee employee = employeeRepository.findBySerialNumber(invoice.getEmployeeSerialNumber());
-        Date updatedDate = new Date();
-        Invoice newInvoice = invoiceService
-                    .saveInvoice(new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer));
-            return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
+        Invoice newInvoice = invoiceService.saveInvoice(invoice);
+        LOGGER.info(" invoice saved  " + invoice.getSerialNumber() + "and id : " + invoice.getId());
+        return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        LOGGER.info(" exception in saved invoice " + invoice.getSerialNumber()+" caused by : " + e.getMessage());
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
 
     @PutMapping("/update/{id}")
     @CrossOrigin("http://localhost:4200/")
-    public ResponseEntity<Invoice> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
     try{
         Invoice newInvoice = invoiceService.updateInvoice(id, invoice);
-        Date updatedDate = new Date();
-        InvoiceHistoryDTO invoiceHistoryDTO = new InvoiceHistoryDTO(new Timestamp(updatedDate.getTime()),newInvoice,newInvoice.getId(), newInvoice.getEmployeeId());
-        invoicesHistoryController.addHistory(invoiceHistoryDTO);
+        invoicesHistoryController.addHistory(newInvoice);
+        LOGGER.info(" history added into invoice " + invoice.getSerialNumber() + " serial ");
+        LOGGER.info(" invoice updated ");
         return new ResponseEntity<Invoice>(newInvoice, HttpStatus.OK);
     }
     catch(Exception exception){
@@ -113,20 +113,37 @@ public class InvoiceController {
         if (invoiceId > 0) {
             boolean deleteStatus = invoiceService.deleteInvoice(invoiceId);
             if (deleteStatus) {
-                return new ResponseEntity<String>("Customer deleted succeessfully.", HttpStatus.OK);
+                return new ResponseEntity<String>("invoice deleted succeessfully.", HttpStatus.OK);
             }
         } else {
-            return new ResponseEntity<String>("Customer not deleted .", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>("invoice not deleted .", HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @GetMapping("/get-invoice/{serialNumber}")
     @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
-        Invoice invoice = invoiceService.getInvoice(serialNumber);
-        return new ResponseEntity<>(invoice, HttpStatus.OK);
+        try{
+            Invoice invoice = invoiceService.getInvoice(serialNumber);
+            return new ResponseEntity<>(invoice, HttpStatus.OK);
+        }catch(InvoiceNotFoundException invoiceNotFoundException){
+            return new ResponseEntity<String>("invoice not found .", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @GetMapping("/getInvoicesEmployee/{serialNumber}")
+    @CrossOrigin("http://localhost:4200/")
+    public ResponseEntity<?> getInvoiceByEmployee(@PathVariable long serialNumber){
+        try{
+            Employee employee = employeeRepository.findBySerialNumber(serialNumber);
+            List<Invoice> invoice = invoiceService.getAllInvoicesByEmpId(employee);
+            return new ResponseEntity<>(invoice, HttpStatus.OK);
+        }catch(InvoiceNotFoundException invoiceNotFoundException){
+            return new ResponseEntity<String>("invoices not found .", HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

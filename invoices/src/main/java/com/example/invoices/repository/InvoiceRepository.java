@@ -1,6 +1,5 @@
 package com.example.invoices.repository;
 
-import com.example.invoices.model.Customer;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.Invoice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +14,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
              value = "select * from Invoice where is_deleted = false",
              nativeQuery = true)
      List<Invoice> getAllInvoices();
+
+     // @Query ("select x from  Invoice  x  where x.employee.id=:empId")
+     List<Invoice> findByEmployee(Employee employee);
 
 }

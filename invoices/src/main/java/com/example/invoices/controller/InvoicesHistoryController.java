@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,10 +30,12 @@ public class InvoicesHistoryController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<InvoiceHistory> addHistory(@RequestBody InvoiceHistoryDTO invoice) {
+    public ResponseEntity<InvoiceHistory> addHistory(@RequestBody Invoice invoice) {
         try {
+            Date updatedDate = new Date();
+            InvoiceHistoryDTO invoiceHistoryDTO = new InvoiceHistoryDTO(new Timestamp(updatedDate.getTime()),invoice,invoice.getId(), invoice.getEmployeeId());
             InvoiceHistory newInvoice = invoiceHistoryService
-                    .saveInvoiceHistory(new InvoiceHistory(invoice.getUpdatedDate(), invoice.getInvoiceInfo(), invoice.getInvoiceInfo().toString(), invoice.getInvoiceInfo().getEmployee()));
+                    .saveInvoiceHistory(new InvoiceHistory(invoiceHistoryDTO.getUpdatedDate(), invoiceHistoryDTO.getInvoiceInfo(), invoiceHistoryDTO.getInvoiceInfo().toString(), invoiceHistoryDTO.getInvoiceInfo().getEmployee()));
             return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
