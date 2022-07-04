@@ -1,7 +1,6 @@
 package com.example.invoices.service;
 
-import com.example.invoices.model.Invoice;
-import com.example.invoices.model.InvoiceItem;
+import com.example.invoices.dto.ItemDTO;
 import com.example.invoices.model.Item;
 import com.example.invoices.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,21 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     ItemRepository itemRepository;
     @Override
-    public Item saveItem(Item item) {
-        Item newItem = itemRepository.save(item);
-        return newItem;
+    public Item saveItem(ItemDTO item) {
+        Item newItem = new Item(item.getSerialNumber(), item.getName(),item.getUnitPrice());
+         Item newItem2 = itemRepository.save(newItem);
+        return newItem2;
     }
 
     @Override
     public List<Item> getAllItem() {
         List<Item> items =  itemRepository.getAllItems();
         return items;
+    }
+    @Override
+    public Item getItemBySerialNumber(long serialNumber){
+        Item item = itemRepository.findBySerialNumber(serialNumber);
+        return item;
     }
 
     @Override

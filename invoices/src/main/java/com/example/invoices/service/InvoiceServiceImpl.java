@@ -10,12 +10,15 @@ import com.example.invoices.repository.CustomerRepository;
 import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @Service
 public class InvoiceServiceImpl implements  InvoiceService {
@@ -25,13 +28,15 @@ public class InvoiceServiceImpl implements  InvoiceService {
     CustomerRepository customerRepository;
     @Autowired
     EmployeeRepository employeeRepository;
+
+
     @Override
     @Transactional
     public Invoice saveInvoice(InvoiceDTO invoice) {
         Customer customer= customerRepository.findBySerialNumber(invoice.getCustomerSerialNumber());
         Employee employee = employeeRepository.findBySerialNumber(invoice.getEmployeeSerialNumber());
         Date updatedDate = new Date();
-        Invoice newInvoice = new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer);
+        Invoice newInvoice = new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer , invoice.getPhoto());
         if(invoiceRepository.existsById(invoice.getId())){
             throw new InvoiceAlreadyExistsException();
         }
@@ -41,7 +46,25 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public List<Invoice>  getInvoice() {
-        List<Invoice> invoices =  invoiceRepository.getAllInvoices();
+        try {
+            List<Invoice> invoices =  invoiceRepository.getAllInvoices();
+            return invoices;
+        }catch (Exception exception){
+            LOGGER.error("error while getting invoices ");
+            LOGGER.error("exception message " + exception.getMessage());
+            LOGGER.error(exception.getStackTrace());
+            return null ;
+        }
+
+    }
+    @Override
+    public Invoice  getInvoiceBySerialNumber(long serialNumber) {
+        Invoice invoice =  invoiceRepository.findBySerialNumber(serialNumber);
+        return invoice;
+    }
+
+    public List<Invoice> findAllInvoices(Pageable pageable){
+        List<Invoice> invoices =  invoiceRepository.findAll(pageable).toList();
         return invoices;
     }
 

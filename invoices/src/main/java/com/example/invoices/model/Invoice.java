@@ -20,6 +20,8 @@ public class Invoice {
     private Timestamp createdDate;
     @Column(name = "is_deleted")
     private boolean isDeleted;
+    @Column(name = "photo")
+    private String photo;
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "customer_id")
@@ -32,7 +34,7 @@ public class Invoice {
     @OneToMany (mappedBy = "invoice")
     private Set <InvoiceItem> quantity;
 
-    public Invoice(long serialNumber, String status, Timestamp createdDate, Employee employee , Customer customer)
+    public Invoice(long serialNumber, String status, Timestamp createdDate, Employee employee , Customer customer , String photo)
     {
         this.serialNumber = serialNumber;
         this.status = status;
@@ -40,7 +42,9 @@ public class Invoice {
         this.isDeleted = false;
         this.employee=employee;
         this.customer=customer;
+        this.photo = photo;
     }
+
     public Invoice(){}
     public int getId() {
         return id;
@@ -93,9 +97,19 @@ public class Invoice {
     public int getEmployeeId(){
         return employee.getId();
     }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public long getCustomerSerialNumber(){
         return customer.getId();
     }
+
+    public String getPhoto() {
+        return photo;
+    }
+
     public String toString() {
         return ("invoice serial number : " + this.getSerialNumber() + "  customer id : "+this.getCustomerSerialNumber() + " invoice status :  "  + this.getStatus());
     }

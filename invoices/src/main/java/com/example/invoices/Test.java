@@ -20,10 +20,10 @@ public class Test{
 
     public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role role =new Role(Type.USER,"test");
+        Role role =new Role(Type.AUDITOR,"test");
         String rawPassword = "0000";
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        Employee newEmployee = new Employee(74512,"test10","test002",role,"tsest@gmail.com","44444","Palestine",encodedPassword);
+        Employee newEmployee = new Employee(2121,"test10","test002",role,"gha@gmail.com","123456","Palestine",encodedPassword);
         Employee savedEmployee = employeeRepository.save(newEmployee);
 
     }
