@@ -2,6 +2,7 @@ package com.example.invoices.service;
 
 import com.example.invoices.dto.InvoiceDTO;
 import com.example.invoices.exception.InvoiceAlreadyExistsException;
+import com.example.invoices.exception.InvoiceIsDeletedException;
 import com.example.invoices.exception.InvoiceNotFoundException;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Employee;
@@ -22,6 +23,7 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @Service
 public class InvoiceServiceImpl implements  InvoiceService {
+
     @Autowired
     InvoiceRepository invoiceRepository ;
     @Autowired
@@ -38,6 +40,7 @@ public class InvoiceServiceImpl implements  InvoiceService {
         Date updatedDate = new Date();
         Invoice newInvoice = new Invoice(invoice.getSerialNumber(), invoice.getStatus(),new Timestamp(updatedDate.getTime()) ,employee,customer , invoice.getPhoto());
         if(invoiceRepository.existsById(invoice.getId())){
+            LOGGER.error("error while saving invoices " + invoice.getSerialNumber() +" already Exists ");
             throw new InvoiceAlreadyExistsException();
         }
          newInvoice = invoiceRepository.save(newInvoice);
@@ -60,6 +63,10 @@ public class InvoiceServiceImpl implements  InvoiceService {
     @Override
     public Invoice  getInvoiceBySerialNumber(long serialNumber) {
         Invoice invoice =  invoiceRepository.findBySerialNumber(serialNumber);
+        if(!(invoiceRepository.existsById(invoice.getId()))){
+            LOGGER.error("error while getting invoice " + serialNumber +" not Exists ");
+            throw new InvoiceNotFoundException();
+        }
         return invoice;
     }
 
@@ -70,24 +77,37 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public Invoice updateInvoice(int invoiceId, InvoiceDTO invoiceDetails) {
+        if(!(invoiceRepository.existsById(invoiceId))){
+            throw new InvoiceNotFoundException();
+        }
         Date updatedDate = new Date();
         Invoice invoice = invoiceRepository.findById(invoiceId).get();
-        invoice.setStatus(invoiceDetails.getStatus());
-        invoice.setCreatedDate(new Timestamp(updatedDate.getTime()));
-        invoice.setSerialNumber(invoiceDetails.getSerialNumber());
-        return invoiceRepository.save(invoice);
+        try {
+            invoice.setStatus(invoiceDetails.getStatus());
+            invoice.setCreatedDate(new Timestamp(updatedDate.getTime()));
+            invoice.setSerialNumber(invoiceDetails.getSerialNumber());
+            return invoiceRepository.save(invoice);
+        }catch(Exception exception){
+            LOGGER.error("error while update invoice ");
+            LOGGER.error("exception message " + exception.getMessage());
+            LOGGER.error(exception.getStackTrace());
+            return invoiceRepository.findBySerialNumber(invoice.getSerialNumber());
+        }
+
     }
 
     @Override
     public boolean deleteInvoice(int invoiceId) {
-        try{
-            Invoice invoice = invoiceRepository.findById(invoiceId).get();
+        Invoice invoice = invoiceRepository.findById(invoiceId).get();
+            if(invoice.isDeleted()){
+                LOGGER.error("error while delete invoice invoice already deleted with id " + invoiceId);
+                throw new InvoiceIsDeletedException("error while delete invoice invoice already deleted");
+            }
+            else {
             invoice.setDeleted(true);
             invoiceRepository.save(invoice);
             return true;
-        }catch(Exception exception){
-            return false;
-        }
+            }
 
     }
     @Override
@@ -95,7 +115,7 @@ public class InvoiceServiceImpl implements  InvoiceService {
         if(invoiceRepository.findBySerialNumber(serialNumber)==null){
             throw new InvoiceNotFoundException();
         }
-        else{
+        else {
             Invoice invoice = invoiceRepository.findBySerialNumber(serialNumber);
             return invoice;
         }
@@ -104,7 +124,15 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public List<Invoice> getAllInvoicesByEmpId(Employee employee) {
-        List<Invoice> invoices = invoiceRepository.findByEmployee(employee);
-        return invoices;
+        try{
+            List<Invoice> invoices = invoiceRepository.findByEmployee(employee);
+            return invoices;
+        } catch(Exception exception){
+            LOGGER.error("error while getting invoices ");
+            LOGGER.error("exception message " + exception.getMessage());
+            LOGGER.error(exception.getStackTrace());
+            return null ;
+        }
+
     }
 }

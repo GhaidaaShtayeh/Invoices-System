@@ -16,4 +16,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
             value = "select * from Item where is_deleted = false",
             nativeQuery = true)
     List<Item> getAllItems();
+
+    boolean existsBySerialNumber(long serialNumber);
 }

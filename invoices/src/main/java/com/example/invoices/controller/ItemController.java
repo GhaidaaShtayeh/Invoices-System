@@ -38,4 +38,11 @@ public class ItemController {
         LOGGER.info("calling add new items from controller ");
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
+
+    @GetMapping("/deleteItem/{itemId}")
+    public boolean deleteInvoice(@PathVariable int itemId) {
+        boolean deleteStatus = itemService.deleteItem(itemId);
+        LOGGER.info(" invoice deleted " + itemId + " id ");
+        return true;
+    }
 }

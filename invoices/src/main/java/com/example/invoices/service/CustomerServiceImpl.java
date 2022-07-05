@@ -1,7 +1,9 @@
 package com.example.invoices.service;
 
 import com.example.invoices.dto.CustomerDTO;
+import com.example.invoices.exception.CustomerIsDeletedException;
 import com.example.invoices.exception.EmptyListException;
+import com.example.invoices.exception.ItemIsDeletedException;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.repository.CustomerRepository;
@@ -89,8 +91,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public boolean deleteCustomer(int customerId) {
+		Customer customer = cutomerRepository.findById(customerId).get();
+		if(customer.isDeleted()){
+			LOGGER.error("error while deleting customer with serial number" + customerId);
+			throw new CustomerIsDeletedException("customer is already deleted");
+		}
 		try {
-			Customer customer = cutomerRepository.findById(customerId).get();
 			customer.setDeleted(true);
 			LOGGER.info("getting customer with id deleted : " + customerId + " from service");
 			cutomerRepository.save(customer);

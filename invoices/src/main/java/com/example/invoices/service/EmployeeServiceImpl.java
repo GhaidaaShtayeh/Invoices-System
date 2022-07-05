@@ -3,6 +3,8 @@ package com.example.invoices.service;
 import java.util.Optional;
 
 import com.example.invoices.dto.EmployeeDTO;
+import com.example.invoices.exception.EmployeeNotFoundException;
+import com.example.invoices.exception.InvoiceNotFoundException;
 import com.example.invoices.model.Role;
 import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.repository.RoleRepository;
@@ -34,6 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			Employee newEmployee = new Employee(employee.getSerialNumber(),employee.getFirstName(), employee.getLastName(),role,employee.getEmail(),employee.getMobileNumber(), employee.getCountry(), employee.getPassword());
 			String encodedPassword = passwordEncoder.encode(newEmployee.getPassword());
 			newEmployee.setPassword(encodedPassword);
+			LOGGER.info("save new customer with id " + newEmployee.getSerialNumber() + " from service");
 			return employeeRepository.save(newEmployee);
 		} catch (Exception exception){
 			LOGGER.error("error while saving user with id " + employee.getSerialNumber());
@@ -54,9 +57,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee getEmployeeBySerialNumber(long serialNumber){
-		try{
 		Employee employee = employeeRepository.findBySerialNumber(serialNumber);
-		return employee;
+		if(!(employeeRepository.existsById(employee.getId()))){
+			throw new EmployeeNotFoundException();
+		}
+		try{
+			LOGGER.info("get employee with id " + serialNumber + " from service");
+			return employee;
 		}catch (Exception exception){
 			LOGGER.error("error while saving user with id " + serialNumber);
 			LOGGER.error("exception message " + exception.getMessage());
