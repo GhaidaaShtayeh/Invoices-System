@@ -1,6 +1,7 @@
 package com.example.invoices.jwt;
 
 import com.example.invoices.model.Employee;
+import com.example.invoices.model.Role;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,7 @@ import static javax.crypto.Cipher.SECRET_KEY;
 @Component
 public class JwtTokenUtil {
 
-    // previous code is not shown...
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
+    private static  Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     private static final long EXPIRE_DURATION = 24 * 60 * 60 * 1000; // 24 hour
 
@@ -25,8 +24,8 @@ public class JwtTokenUtil {
 
     public String generateAccessToken(Employee user) {
         return Jwts.builder()
-                .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
-                .setIssuer("CodeJava")
+                .setSubject(String.format("%s,%s,%s", user.getId(), user.getEmail(),user.getRole().getName()))
+                .claim("role",user.getRole().getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
@@ -57,7 +56,7 @@ public class JwtTokenUtil {
         return parseClaims(token).getSubject();
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(String.valueOf(SECRET_KEY))
                 .parseClaimsJws(token)

@@ -1,4 +1,14 @@
 package com.example.invoices.service;
 
-public class ItemService {
+import com.example.invoices.dto.ItemDTO;
+import com.example.invoices.model.Invoice;
+import com.example.invoices.model.Item;
+
+import java.util.List;
+
+public interface ItemService {
+    public Item saveItem(ItemDTO item);
+    public List<Item> getAllItem();
+    Item getItemBySerialNumber(long serialNumber);
+    public boolean deleteItem(int itemId);
 }

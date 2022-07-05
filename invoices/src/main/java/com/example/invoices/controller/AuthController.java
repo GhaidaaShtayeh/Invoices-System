@@ -12,10 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.invoices.model.Employee;
 
 import javax.validation.Valid;
@@ -26,6 +23,8 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     @Autowired
     JwtTokenUtil jwtUtil;
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
@@ -44,11 +43,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
-    @Autowired
-    Test test;
-    @GetMapping("/login")
-    public void insertUserRec() {
-    	test.testCreatEmployee();
-    }
+
 }

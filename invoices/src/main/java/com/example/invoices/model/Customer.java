@@ -1,12 +1,16 @@
 package com.example.invoices.model;
 
-import javax.persistence.*;
-import java.util.Set;
+import lombok.Data;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
+@Data
 @Entity
 @Table(name = "customer")
+public class Customer implements Serializable {
+    private final static long serialVersionUID = 1L;
 
-public class Customer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
@@ -21,10 +25,18 @@ public class Customer {
     @Column(name = "mobile_number")
     private String mobileNumber;
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
 
-    @OneToMany
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="customer")
     private Set <Invoice> invoices;
 
     public Customer(){}
@@ -34,7 +46,7 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.mobileNumber = mobileNumber;
-        this.isDeleted = false;
+        this.deleted = false;
     }
     public int getId() {
         return this.id;
@@ -42,7 +54,7 @@ public class Customer {
     public String getName() {
         return this.firstName;
     }
-    public Long getSerialNumber() {
+    public Long getSerialNumber(Long serialNumber) {
         return this.serialNumber;
     }
     public String getEmail() {
@@ -58,6 +70,11 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -70,12 +87,17 @@ public class Customer {
 	public Set<Invoice> getInvoices() {
 		return invoices;
 	}
-	public void setLastName(String lastName) {
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	public void setInvoices(Set<Invoice> invoices) {
 		this.invoices = invoices;
 	}
-    
-    
+
 }

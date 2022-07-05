@@ -20,16 +20,50 @@ public class Item {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @ManyToMany
-    private Set<Invoice> invoices;
+   /* @ManyToMany()
+    @JoinTable(
+            name = "invoice_item",
+            joinColumns = @JoinColumn(name = "invoice_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Invoice> invoices;*/
+
+    @OneToMany (mappedBy = "invoice")
+    private Set <InvoiceItem> quantity;
 
     public Item(){}
-    public Item(long serialNumber, String name, int unitPrice, Timestamp craetedDate){
+    public Item(long serialNumber, String name, int unitPrice){
         this.serialNumber = serialNumber;
         this.name = name;
         this.unitPrice = unitPrice;
-        this.createdDate = craetedDate;
         this.isDeleted = false;
     }
 
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getUnitPrice() {
+        return unitPrice;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public Set<InvoiceItem> getQuantity() {
+        return quantity;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

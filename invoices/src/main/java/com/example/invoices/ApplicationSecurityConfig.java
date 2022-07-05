@@ -1,7 +1,7 @@
 package com.example.invoices;
 
 import com.example.invoices.jwt.JwtTokenFilter;
-import com.example.invoices.repository.IEmployeeRepository;
+import com.example.invoices.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private IEmployeeRepository userRepo;
+    private EmployeeRepository userRepo;
     @Autowired
     JwtTokenFilter jwtTokenFilter;
 
@@ -54,14 +54,28 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.authorizeRequests()
-        .antMatchers("employee/save").hasRole("SUPER_USER")
-        .antMatchers("/customer/viewList").hasAnyRole("SUPER_USER, AUDITOR, USER")
-        .antMatchers("/customer/getCustomersByPageLimit").hasAnyRole("SUPER_USER, AUDITOR")
-        .antMatchers("/h2-console/**").permitAll()
-        .antMatchers("/login").permitAll()
-        .anyRequest().authenticated();
+        .antMatchers("/employee/save").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/invoice/viewList").permitAll()
+                .antMatchers("/invoice/getInvoicesEmployee/{serialNumber}").permitAll()
+                .antMatchers("/invoice/search/{serialNumber}").permitAll()
+                .antMatchers("/invoiceItem/updateQuantity/{serialNumber}").permitAll()
+                .antMatchers("/invoiceItem/viewList/{serialNumber}").permitAll()
+                .antMatchers("/invoiceItem/save").permitAll()
+                .antMatchers("/customer/viewList").hasRole("SUPER_USER")
+                .antMatchers("/customer/deleteCustomer/{customerId}").hasRole("SUPER_USER")
+                .antMatchers("/invoice/save").hasAnyRole("SUPER_USER" ,"USER")
+                .antMatchers("/invoice/dashboard").hasRole("SUPER_USER")
+                .antMatchers("/invoice/update/{id}").hasAnyRole("SUPER_USER","USER")
+                .antMatchers("/customer/save").hasRole("SUPER_USER")
+                .antMatchers("/getCustomer/{invoiceId}").hasRole("SUPER_USER")
+                .antMatchers("/item/viewList").hasRole("SUPER_USER")
+                .antMatchers("/item/save").hasRole("SUPER_USER")
+                .antMatchers("/invoice/get-invoice/{serialNumber}").hasRole("SUPER_USER")
+                .antMatchers("/invoice/deleteInvoice/{invoiceId}").hasRole("SUPER_USER")
+                .antMatchers("/invoicehistory/get-invoice-history/{serialNumber}").hasAnyRole("SUPER_USER","AUDITOR")
+                .anyRequest().authenticated();
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {

@@ -1,17 +1,16 @@
 package com.example.invoices.service;
 
+import com.example.invoices.dto.CustomerDTO;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 
 public interface CustomerService {
 
-	public Customer addCustomer(Customer customer);
+	public Customer addCustomer(CustomerDTO customer);
 
-	public Customer getCustomer(int id);
+	public Customer getCustomer(int customerId);
 
-	public Customer updateCustomer(Customer customer);
+	public Customer updateCustomer(int customerId, CustomerDTO customerDetails);
 
-	public Invoice updateCustomerInvoice(Invoice invoince, int id);
-
-	public int deleteCustomer(Customer customer);
+	public boolean deleteCustomer(int customerId);
 }
