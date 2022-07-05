@@ -70,6 +70,11 @@ public class Customer implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public long getSerialNumber() {
+        return serialNumber;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

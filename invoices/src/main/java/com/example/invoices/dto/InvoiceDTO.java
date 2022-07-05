@@ -12,8 +12,15 @@ public class InvoiceDTO {
     private long customerSerialNumber;
     private long employeeSerialNumber;
     private boolean isDeleted;
+    private String photo;
 
+    public String getPhoto() {
+        return photo;
+    }
 
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public int getId() {
         return id;

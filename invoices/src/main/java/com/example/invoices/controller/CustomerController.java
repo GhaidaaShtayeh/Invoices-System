@@ -11,7 +11,7 @@ import com.example.invoices.model.Customer;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.service.CustomerServiceImpl;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -19,92 +19,40 @@ public class CustomerController {
     CustomerServiceImpl customerService;
 
     @GetMapping("/viewList")
-	@CrossOrigin("http://localhost:4200/")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
-			List<Customer> customers = new ArrayList<>();
-			customers = customerService.getAllCustomers();
-			if (customers.isEmpty()) {
-				LOGGER.error("no content ");
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-		LOGGER.info("calling list of customers");
+			List<Customer> customers = customerService.getAllCustomers();
+		LOGGER.info(" get all customers controllers are calling ");
 		return new ResponseEntity<>(customers, HttpStatus.OK);
 	}
 
-    @GetMapping("/getCustomersByPageLimit")
-    public List<Customer> getListOfCustomers(){
-
-    	return null;
-    }
-
     @PostMapping("/save")
-	@CrossOrigin("http://localhost:4200/")
 		public ResponseEntity<Customer> addCustomer(@RequestBody CustomerDTO customer) {
-			try {
-				Customer newCustomer = customerService
-						.addCustomer(new Customer(customer.getSerialNumber(), customer.getFirstName(),customer.getLastName(),customer.getEmail(),customer.getMobileNumber()));
-				return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
-			} catch (Exception e) {
-				LOGGER.error("Exception in save method " + e.getMessage());
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+				Customer newCustomer = customerService.addCustomer(customer);
+		LOGGER.info("add new customer are calling from controller with id " + newCustomer.getSerialNumber() );
+		return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
 		}
 
-	@PatchMapping("/updateCustomerInvoice")
-	public ResponseEntity<CustomerDTO> updateCustomerInvoice(@RequestBody CustomerDTO customer) {
-		Set<Invoice> updatedList = new HashSet<>();
-		try{
-			for(Invoice invoice: customer.getInvoices()) {
-
-			Invoice updatedInvoice = customerService.updateCustomerInvoice(invoice,  customer.getId());
-			updatedList.add(updatedInvoice);
-		}
-			customer.setInvoices(updatedList);
-			LOGGER.info(" update work successfully ");
-			return new ResponseEntity<CustomerDTO>(customer, HttpStatus.OK);}
-		catch(Exception exception){
-			LOGGER.error("Exception in update method " + exception.getMessage());
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Customer> updateCustomer(@PathVariable(value = "id") int id, @RequestBody CustomerDTO customer) {
-		try{
-			Customer customer1 = customerService.updateCustomer(id, customer);
-			LOGGER.info(" update work successfully ");
-			return new ResponseEntity<Customer>(customer1, HttpStatus.OK);
-		}catch (Exception exception){
-			LOGGER.error("Exception in update method " + exception.getMessage());
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			Customer newCustomer = customerService.updateCustomer(id, customer);
+		LOGGER.info("update customer are calling from controller with id " + newCustomer.getSerialNumber() );
+		return new ResponseEntity<Customer>(newCustomer, HttpStatus.OK);
 
 	}
 	
 	@GetMapping("/getCustomer/{customerId}")
 	public ResponseEntity<?> getCustomer(@PathVariable @RequestBody int customerId) {
 			Optional<Customer> customerData = Optional.ofNullable(customerService.getCustomer(customerId));
-			if (customerData.isPresent()) {
-				LOGGER.info(" show customer work successfully ");
-				return new ResponseEntity<>(customerData.get(), HttpStatus.OK);
-			} else {
-				LOGGER.info(" exception in getCustomer  ");
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
+		LOGGER.info("get customer details are calling from controller for customer id :  " + customerId );
+		return new ResponseEntity<>(customerData.get(), HttpStatus.OK);
 		}
 	
 	@PutMapping("/deleteCustomer/{customerId}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
-		if (customerId > 0) {
 			boolean deleteStatus = customerService.deleteCustomer(customerId);
-			if (deleteStatus) {
-				return new ResponseEntity<String>("Customer deleted succeessfully.", HttpStatus.OK);
-			}
-		} else {
-			return new ResponseEntity<String>("Customer not deleted .", HttpStatus.NOT_FOUND);
-		}
+		LOGGER.info("delete customer calling from controller for customer id :  " + customerId );
+		return new ResponseEntity<String>("Customer deleted.", HttpStatus.OK);
 
-		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 }

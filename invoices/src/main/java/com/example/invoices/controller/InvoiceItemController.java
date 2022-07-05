@@ -11,6 +11,8 @@ import com.example.invoices.repository.ItemRepository;
 import com.example.invoices.service.InvoiceItemService;
 import com.example.invoices.service.InvoiceItemServiceImpl;
 import com.example.invoices.service.InvoiceServiceImpl;
+import com.example.invoices.service.ItemService;
+import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,66 +22,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
+
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoiceItem")
 public class InvoiceItemController {
-
     @Autowired
     InvoiceItemServiceImpl invoiceService;
     @Autowired
-    ItemRepository itemRepository;
+    ItemService itemService;
     @Autowired
-    InvoiceRepository invoiceRepository;
+    InvoiceServiceImpl invoiceCardService;
+
 
     @GetMapping("/viewList/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<List<InvoiceItem>> getAllCustomers(@PathVariable long serialNumber) {
-        List<InvoiceItem> invoices = new ArrayList<>();
-        invoices = invoiceService.getAllInvoiceItem(serialNumber);
-        if (invoices.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        List<InvoiceItem> invoices = invoiceService.getAllInvoiceItem(serialNumber);
+        LOGGER.info("get all items for invoices with serial number from controller" + serialNumber);
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @PostMapping("/save")
     public ResponseEntity<InvoiceItem> addInvoice(@RequestBody InvoiceItemDTO invoiceItem) {
-
-        try {
-
-            Invoice invoice = invoiceRepository.findBySerialNumber(invoiceItem.getInvoiceSerialNumber());
-            Item item = itemRepository.findBySerialNumber(invoiceItem.getItemSerialNumber());
-            InvoiceItem newInvoice = invoiceService
-                    .saveInvoiceItem(new InvoiceItem(invoiceItem.getQuantity(),invoice,item));
-            return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Invoice invoice = invoiceCardService.getInvoiceBySerialNumber(invoiceItem.getInvoiceSerialNumber());
+        LOGGER.info("get invoice serial number to add new item from controller : " + invoiceItem.getInvoiceSerialNumber());
+        Item item = itemService.getItemBySerialNumber(invoiceItem.getItemSerialNumber());
+        LOGGER.info("get item with serial number to add new item from controller : " + invoiceItem.getItemSerialNumber());
+        InvoiceItem newInvoice = invoiceService.saveInvoiceItem(new InvoiceItem(invoiceItem.getQuantity(),invoice,item));
+        LOGGER.info("saved item into invoice from controller ");
+        return new ResponseEntity<>(newInvoice ,HttpStatus.CREATED);
     }
 
 
     @PutMapping("/updateQuantity/{id}")
     public ResponseEntity<InvoiceItem> updateCustomer(@PathVariable(value = "id") int id, @RequestBody InvoiceItemDTO invoice) {
-
         InvoiceItem newInvoice = invoiceService.updateInvoiceItem(id, invoice);
-
+        LOGGER.info("update item quantity from controller with item id : " + id);
         return new ResponseEntity<InvoiceItem>(newInvoice, HttpStatus.OK);
     }
 
 
-    /*@PutMapping("/deleteInvoice/{invoiceId}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable int invoiceId) {
 
-        if (invoiceId > 0) {
-            boolean deleteStatus = invoiceService.deleteInvoiceItem(invoiceId);
-            if (deleteStatus) {
-                return new ResponseEntity<String>("Customer deleted succeessfully.", HttpStatus.OK);
-            }
-        } else {
-            return new ResponseEntity<String>("Customer not deleted .", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-*/
 }
