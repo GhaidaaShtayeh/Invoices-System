@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "invoice_item")
 @Data
-@NoArgsConstructor
 public class InvoiceItem {
 
     @Id

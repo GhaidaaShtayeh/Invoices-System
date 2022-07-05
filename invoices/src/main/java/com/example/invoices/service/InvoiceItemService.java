@@ -12,5 +12,5 @@ public interface InvoiceItemService {
     public InvoiceItem saveInvoiceItem(InvoiceItem invoiceItem);
     public List<InvoiceItem> getAllInvoiceItem(long serialNumber);
     public InvoiceItem updateInvoiceItem(int invoiceId, InvoiceItemDTO invoice);
-    //public boolean deleteInvoiceItem(int invoiceId);
+
 }

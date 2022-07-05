@@ -10,13 +10,14 @@ import com.example.invoices.model.Invoice;
 import com.example.invoices.repository.CustomerRepository;
 import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.repository.InvoiceRepository;
-import com.example.invoices.service.CustomerServiceImpl;
-import com.example.invoices.service.InvoiceHistoryService;
-import com.example.invoices.service.InvoiceServiceImpl;
+import com.example.invoices.service.*;
+import com.example.invoices.utilite.FileUpload;
+import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -25,125 +26,102 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
-@CrossOrigin("http://localhost:4200/")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
+
+    private SetHeaders headers;
+
+    public InvoiceController(){
+        headers = new SetHeaders();
+    }
+
     @Autowired
     InvoiceServiceImpl invoiceService;
     @Autowired
-    InvoiceRepository invoiceRepository;
-    @Autowired
     InvoicesHistoryController invoicesHistoryController;
-
     @Autowired
-    EmployeeRepository employeeRepository;
+    EmployeeServiceImpl employeeService;
+
+
     @GetMapping("/dashboard")
-    @CrossOrigin("http://localhost:4200/")
     public List<Invoice> getAll (@RequestParam String field, @RequestParam int page, @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size, Direction.DESC, field);
-        LOGGER.info(" page pagination calling ");
-        return invoiceRepository.findAll(pageable).toList();
+        LOGGER.info(" get All pageable Api controller are calling  " + page + " page number and size " + size + "sorting dsc according to  " + field);
+        return invoiceService.findAllInvoices(pageable);
     }
 
+    @GetMapping("/search")
+    public Invoice getInvoiceValue(@RequestBody long invoiceId){
+        Invoice invoice = invoiceService.getInvoiceBySerialNumber(invoiceId);
+        LOGGER.info(" search Api controller are calling  foe serialNumber : " +invoiceId);
+        return invoice;
+    }
+
+
     @GetMapping("/viewList")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<List<Invoice>> getAllInvoices() {
-        List<Invoice> invoices = new ArrayList<>();
-        invoices = invoiceService.getInvoice();
-        if (invoices.isEmpty()) {
-            LOGGER.error(" list are empty  ");
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        LOGGER.info(" list of invoices displayed ");
+        List<Invoice> invoices = invoiceService.getInvoice();
+        LOGGER.info(" list of invoices displayed controller calling ");
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @PostMapping("/save")
-    @CrossOrigin("http://localhost:4200/")
-    public ResponseEntity<Invoice> addInvoice(@RequestBody InvoiceDTO invoice) {
-    try {
-        Invoice newInvoice = invoiceService.saveInvoice(invoice);
-        LOGGER.info(" invoice saved  " + invoice.getSerialNumber() + "and id : " + invoice.getId());
-        return new ResponseEntity<>(newInvoice, HttpStatus.CREATED);
-        } catch (Exception e) {
-        LOGGER.info(" exception in saved invoice " + invoice.getSerialNumber()+" caused by : " + e.getMessage());
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Invoice> addInvoice(@RequestBody InvoiceDTO invoice) throws IOException {
+        Invoice savedInvoice = invoiceService.saveInvoice(invoice);
+        LOGGER.info(" invoice saved  " + invoice.getSerialNumber() + "and id : " + invoice.getId() + "from controller");
+        return new ResponseEntity<>(savedInvoice, HttpStatus.CREATED);
 
-        }
     }
 
     @PutMapping("/update/{id}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable(value = "id") int id, @RequestBody InvoiceDTO invoice) {
-    try{
         Invoice newInvoice = invoiceService.updateInvoice(id, invoice);
         invoicesHistoryController.addHistory(newInvoice);
-        LOGGER.info(" history added into invoice " + invoice.getSerialNumber() + " serial ");
-        LOGGER.info(" invoice updated ");
+        LOGGER.info(" history added into invoice " + invoice.getSerialNumber() + " serial from controller");
+        LOGGER.info(" invoice id : "+id+" updated from controller");
         return new ResponseEntity<Invoice>(newInvoice, HttpStatus.OK);
-    }
-    catch(Exception exception){
-        System.out.println(exception.getMessage());
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-
-        }
     }
 
     @GetMapping("/getCustomer/{invoiceId}")
     public ResponseEntity<?> getCustomer(@PathVariable @RequestBody int invoiceId) {
         Optional<Invoice> invoiceData = Optional.ofNullable(invoiceService.getInvoice().get(invoiceId));
-        if (invoiceData.isPresent()) {
-            return new ResponseEntity<>(invoiceData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        LOGGER.info(" get customer with invoice id   " + invoiceId + " are calling from controller ");
+        return new ResponseEntity<>(invoiceData.get(), HttpStatus.OK);
     }
 
-    @PutMapping("/deleteInvoice/{invoiceId}")
-    @CrossOrigin("http://localhost:4200/")
-    public ResponseEntity<?> deleteCustomer(@PathVariable @RequestBody int invoiceId) {
-        if (invoiceId > 0) {
+    @GetMapping("/deleteInvoice/{invoiceId}")
+    public boolean deleteInvoice(@PathVariable int invoiceId) {
             boolean deleteStatus = invoiceService.deleteInvoice(invoiceId);
-            if (deleteStatus) {
-                return new ResponseEntity<String>("invoice deleted succeessfully.", HttpStatus.OK);
-            }
-        } else {
-            return new ResponseEntity<String>("invoice not deleted .", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+                LOGGER.info(" invoice deleted " + invoiceId + " id ");
+                return true;
     }
 
     @GetMapping("/get-invoice/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoice(@PathVariable long serialNumber){
-        try{
             Invoice invoice = invoiceService.getInvoice(serialNumber);
-            return new ResponseEntity<>(invoice, HttpStatus.OK);
-        }catch(InvoiceNotFoundException invoiceNotFoundException){
-            return new ResponseEntity<String>("invoice not found .", HttpStatus.NOT_FOUND);
-        }
-
+        LOGGER.info(" get All invoice with id " + serialNumber +" details Api are calling from controller");
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
     @GetMapping("/getInvoicesEmployee/{serialNumber}")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> getInvoiceByEmployee(@PathVariable long serialNumber){
-        try{
-            Employee employee = employeeRepository.findBySerialNumber(serialNumber);
-            List<Invoice> invoice = invoiceService.getAllInvoicesByEmpId(employee);
-            return new ResponseEntity<>(invoice, HttpStatus.OK);
-        }catch(InvoiceNotFoundException invoiceNotFoundException){
-            return new ResponseEntity<String>("invoices not found .", HttpStatus.NOT_FOUND);
-        }
-
+            Employee employee = employeeService.getEmployeeBySerialNumber(serialNumber);
+        LOGGER.info(" get All invoice with id details Api are calling from controller for Employee "+ serialNumber);
+        List<Invoice> invoice = invoiceService.getAllInvoicesByEmpId(employee);
+        LOGGER.info(" get All invoice from controller are calling ");
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
 }

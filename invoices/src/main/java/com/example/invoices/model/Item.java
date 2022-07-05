@@ -58,4 +58,12 @@ public class Item {
     public Set<InvoiceItem> getQuantity() {
         return quantity;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

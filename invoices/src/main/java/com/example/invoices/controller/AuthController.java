@@ -24,8 +24,8 @@ public class AuthController {
     @Autowired
     JwtTokenUtil jwtUtil;
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
-    @CrossOrigin("http://localhost:4200/")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
