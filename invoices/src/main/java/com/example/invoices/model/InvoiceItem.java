@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "invoice_item")
 @Data
-@NoArgsConstructor
 public class InvoiceItem {
 
     @Id
@@ -31,6 +30,9 @@ public class InvoiceItem {
         this.item=item;
     }
 
+    public InvoiceItem(){
+
+    }
     public int getId() {
         return id;
     }

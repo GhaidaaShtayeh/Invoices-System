@@ -31,15 +31,15 @@ public class UserRepositoryTest {
     @Test
     public void testCreatEmployee(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Role role =  new Role(Type.SUPER_USER,"test");
+        Role role =  new Role(Type.AUDITOR,"test");
 
 
 
-        String rawPassword = "nam2020";
+        String rawPassword = "0000";
 
 
         String encodedPassword = passwordEncoder.encode(rawPassword);
-        Employee newEmployee = new Employee(22225552,"test10","test002",role,"nam@test.net","55555","Palestine",encodedPassword);
+        Employee newEmployee = new Employee(17456,"test10","test002",role,"test33@test.net","12377","Palestine",encodedPassword);
         Employee savedEmployee = employeeRepository.save(newEmployee);
         assertThat(savedEmployee).isNotNull();
         assertThat(savedEmployee.getId()).isGreaterThan(0);
