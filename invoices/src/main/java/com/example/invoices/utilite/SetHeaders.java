@@ -24,7 +24,6 @@ public class SetHeaders {
     public HttpHeaders Headers() {
 
         HttpHeaders headers = new HttpHeaders();
-
         headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
         headers.add("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Accept=application/json , Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
         return headers;

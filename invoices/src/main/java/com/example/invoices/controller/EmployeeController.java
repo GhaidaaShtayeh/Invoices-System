@@ -31,14 +31,9 @@ public class EmployeeController {
 	@PostMapping("/save")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 		Employee employee1 = employeeService.saveEmployee(employee);
-		if (employee1.getId() > 0){
-			LOGGER.info(" new user registered ");
-			return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);
-		}
-		else{
-			LOGGER.info(" sno user added ");
-			return new ResponseEntity<String>("Employee is not added", HttpStatus.METHOD_FAILURE);
-		}
+		LOGGER.info(" new employee registered into system with serial number  : " + employee.getSerialNumber() + " this calling from controller");
+		return new ResponseEntity<Employee>(employee1, HttpStatus.CREATED);
+
 	}
 
 }

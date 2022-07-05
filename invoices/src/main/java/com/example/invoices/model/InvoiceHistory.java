@@ -44,6 +44,10 @@ public class InvoiceHistory {
     this.employee = employee;
 }
 
+    public int getId() {
+        return id;
+    }
+
     public Timestamp getUpdatedDate() {
         return updatedDate;
     }
