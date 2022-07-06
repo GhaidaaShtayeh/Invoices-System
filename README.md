@@ -6,11 +6,11 @@ An application to make invoices easier to be tracked
 
 ## Plan & Workflow
 
-**1- Define used tools and prepare workspace.
+*1- Define used tools and prepare workspace.
 Used tools: Git, spring boot, mysql, Angular Framework (Frontend side)
 
 
-**2- Planning Stage
+*2- Planning Stage*
 ● Provide a DB Design - EMR
 
 ![ERD-Inovices (3)](https://user-images.githubusercontent.com/79005401/177310660-f22055e8-a38e-40ee-a19e-855f1e91fc1a.jpg)
