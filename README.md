@@ -46,7 +46,7 @@ Used tools: Git, spring boot, mysql, Angular Framework (Frontend side)
 
 - Delete invoice/invoices
 
-### 4- Add Users Roles and Security checks for both frontend-backend sides.
+### 4- Add Users Roles and Security checks for both backend sides.
 
 ### 5- Create a presentation and describe the whole system
 
