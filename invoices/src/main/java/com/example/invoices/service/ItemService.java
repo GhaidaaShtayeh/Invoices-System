@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface ItemService {
     public Item saveItem(ItemDTO item);
+
     public List<Item> getAllItem();
+
     Item getItemBySerialNumber(long serialNumber);
-    public boolean deleteItem(int itemId);
+
+    public boolean deleteItem(long itemSerialNumber);
 }

@@ -39,10 +39,10 @@ public class ItemController {
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
 
-    @GetMapping("/deleteItem/{itemId}")
-    public boolean deleteInvoice(@PathVariable int itemId) {
-        boolean deleteStatus = itemService.deleteItem(itemId);
-        LOGGER.info(" invoice deleted " + itemId + " id ");
+    @GetMapping("/deleteItem/{itemSerialNumber}")
+    public boolean deleteInvoice(@PathVariable long itemSerialNumber) {
+        boolean deleteStatus = itemService.deleteItem(itemSerialNumber);
+        LOGGER.info(" invoice deleted " + itemSerialNumber + " id ");
         return true;
     }
 }
