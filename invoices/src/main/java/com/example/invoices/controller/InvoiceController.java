@@ -115,13 +115,11 @@ public class InvoiceController {
         return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
-    @GetMapping("/getInvoicesEmployee/{serialNumber}")
-    public ResponseEntity<?> getInvoiceByEmployee(@PathVariable long serialNumber){
-            Employee employee = employeeService.getEmployeeBySerialNumber(serialNumber);
-        LOGGER.info(" get All invoice with id details Api are calling from controller for Employee "+ serialNumber);
-        List<Invoice> invoice = invoiceService.getAllInvoicesByEmpId(employee);
-        LOGGER.info(" get All invoice from controller are calling ");
-        return new ResponseEntity<>(invoice, HttpStatus.OK);
+    @GetMapping("/getInvoices")
+    public ResponseEntity<?> getInvoiceByEmployee(@RequestHeader (name="Authorization") String token) {
+        List<Invoice> invoices = invoiceService.getInvoice(token);
+        LOGGER.info(" list of invoices displayed controller calling ");
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
 }
