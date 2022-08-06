@@ -14,6 +14,7 @@ import com.example.invoices.service.*;
 import com.example.invoices.utilite.FileUpload;
 import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import java.util.*;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @CrossOrigin(origins = "*")
+@Configuration
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {

@@ -127,9 +127,9 @@ public class InvoiceServiceImpl implements  InvoiceService {
 
     @Override
     public List<Invoice> getInvoice(String token) {
-        final Claims claims=jwtTokenFilter.parseClaims(token.split(" ")[1].trim());
+        final Claims claims = jwtTokenFilter.parseClaims(token.split(" ")[1].trim());
+        System.out.print("claims " + claims);
         int authId = (int) claims.get("id");
-        System.out.println("authId "+authId);
         if(invoiceRepository.findByEmployeeId(authId)==null){
             throw new InvoiceNotFoundException();
         }
