@@ -65,9 +65,9 @@ public class InvoiceController {
     }
 
     @GetMapping("/search")
-    public Invoice getInvoiceValue(@RequestBody long invoiceId){
-        Invoice invoice = invoiceService.getInvoiceBySerialNumber(invoiceId);
-        LOGGER.info(" search Api controller are calling  foe serialNumber : " +invoiceId);
+    public Invoice getInvoiceValue(@RequestBody long serialNumber){
+        Invoice invoice = invoiceService.getInvoiceBySerialNumber(serialNumber);
+        LOGGER.info(" search Api controller are calling  foe serialNumber : " +serialNumber);
         return invoice;
     }
 

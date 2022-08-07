@@ -27,6 +27,7 @@ public class JwtTokenUtil {
                 .setSubject(String.format("%s,%s,%s", user.getId(), user.getEmail(),user.getRole().getName()))
                 .claim("role",user.getRole().getName())
                 .claim("id" , user.getId())
+                .claim("serialNumber" , user.getSerialNumber())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
