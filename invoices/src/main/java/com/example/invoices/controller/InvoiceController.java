@@ -43,18 +43,11 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 @RequestMapping("/invoice")
 public class InvoiceController {
 
-    private SetHeaders headers;
-
-    public InvoiceController(){
-        headers = new SetHeaders();
-    }
-
     @Autowired
     InvoiceServiceImpl invoiceService;
     @Autowired
     InvoicesHistoryController invoicesHistoryController;
-    @Autowired
-    EmployeeServiceImpl employeeService;
+
 
 
     @GetMapping("/dashboard")
@@ -64,9 +57,10 @@ public class InvoiceController {
         return invoiceService.findAllInvoices(pageable);
     }
 
-    @GetMapping("/search")
-    public Invoice getInvoiceValue(@RequestBody long serialNumber){
-        Invoice invoice = invoiceService.getInvoiceBySerialNumber(serialNumber);
+    @GetMapping("/search/{serialNumber}")
+    public List<Invoice> getInvoiceValue(@PathVariable(value = "serialNumber") long serialNumber){
+        List<Invoice> invoice  = new ArrayList<>();
+        invoice.add(invoiceService.getInvoiceBySerialNumber(serialNumber));
         LOGGER.info(" search Api controller are calling  foe serialNumber : " +serialNumber);
         return invoice;
     }
