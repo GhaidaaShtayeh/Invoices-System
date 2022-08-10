@@ -14,17 +14,17 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
      Invoice findBySerialNumber(long serialNumber);
 
-     @Query(
-             value = "select * from Invoice where is_deleted = false",
-             nativeQuery = true)
-     List<Invoice> getAllInvoices(Pageable pageable);
 
      @Query(
              value = "select * from Invoice where is_deleted = false",
              nativeQuery = true)
      List<Invoice> getAllInvoices();
 
-     // @Query ("select x from  Invoice  x  where x.employee.id=:empId")
-     List<Invoice> findByEmployee(Employee employee);
+
+
+     @Query(
+             value = "select * from  Invoice  x  where x.employee_id=:empId and x.is_deleted = false",
+             nativeQuery = true)
+     List<Invoice> findByEmployeeId(int empId);
 
 }

@@ -17,6 +17,6 @@ public interface InvoiceService {
     public Invoice updateInvoice(int invoiceId, InvoiceDTO invoiceDetails);
     public boolean deleteInvoice(int invoiceId);
     public Invoice getInvoice(long serialNumber);
-    public List<Invoice > getAllInvoicesByEmpId(Employee employee);
+    public List<Invoice> getInvoice(String token);
 
 }

@@ -48,7 +48,7 @@ public class CustomerController {
 		return new ResponseEntity<>(customerData.get(), HttpStatus.OK);
 		}
 	
-	@PutMapping("/deleteCustomer/{customerId}")
+	@GetMapping("/deleteCustomer/{customerId}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable int customerId) {
 			boolean deleteStatus = customerService.deleteCustomer(customerId);
 		LOGGER.info("delete customer calling from controller for customer id :  " + customerId );

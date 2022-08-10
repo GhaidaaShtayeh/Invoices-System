@@ -4,12 +4,14 @@ import com.example.invoices.dto.InvoiceDTO;
 import com.example.invoices.exception.InvoiceAlreadyExistsException;
 import com.example.invoices.exception.InvoiceIsDeletedException;
 import com.example.invoices.exception.InvoiceNotFoundException;
+import com.example.invoices.jwt.JwtTokenUtil;
 import com.example.invoices.model.Customer;
 import com.example.invoices.model.Employee;
 import com.example.invoices.model.Invoice;
 import com.example.invoices.repository.CustomerRepository;
 import com.example.invoices.repository.EmployeeRepository;
 import com.example.invoices.repository.InvoiceRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,8 @@ public class InvoiceServiceImpl implements  InvoiceService {
     CustomerRepository customerRepository;
     @Autowired
     EmployeeRepository employeeRepository;
-
+    @Autowired
+    JwtTokenUtil jwtTokenFilter;
 
     @Override
     @Transactional
@@ -123,16 +126,18 @@ public class InvoiceServiceImpl implements  InvoiceService {
     }
 
     @Override
-    public List<Invoice> getAllInvoicesByEmpId(Employee employee) {
-        try{
-            List<Invoice> invoices = invoiceRepository.findByEmployee(employee);
-            return invoices;
-        } catch(Exception exception){
-            LOGGER.error("error while getting invoices ");
-            LOGGER.error("exception message " + exception.getMessage());
-            LOGGER.error(exception.getStackTrace());
-            return null ;
+    public List<Invoice> getInvoice(String token) {
+        final Claims claims = jwtTokenFilter.parseClaims(token.split(" ")[1].trim());
+        System.out.print("claims " + claims);
+        int authId = (int) claims.get("id");
+        if(invoiceRepository.findByEmployeeId(authId)==null){
+            throw new InvoiceNotFoundException();
+        }
+        else {
+            List<Invoice> invoice = invoiceRepository.findByEmployeeId(authId);
+            return invoice;
         }
 
     }
+
 }

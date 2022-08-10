@@ -66,10 +66,10 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public boolean deleteItem(int itemId) {
-        Item item = itemRepository.findById(itemId).get();
+    public boolean deleteItem(long itemSerialNumber) {
+        Item item = itemRepository.findBySerialNumber(itemSerialNumber);
         if(item.isDeleted()){
-            LOGGER.error("error while deleting item with serial number" + itemId);
+            LOGGER.error("error while deleting item with serial number" + itemSerialNumber);
             throw new ItemIsDeletedException("item is already deleted");
         }
         else {
