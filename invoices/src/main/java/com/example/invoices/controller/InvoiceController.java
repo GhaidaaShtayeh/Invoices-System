@@ -41,6 +41,13 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 @Configuration
 @RestController
 @RequestMapping("/invoice")
+
+/*
+here I put all invoice controllers
+I can add new invoice and show list of invoices by user log in details or by paggination
+table, i can update them and delete them too
+and show details for invoice
+*/
 public class InvoiceController {
 
     @Autowired

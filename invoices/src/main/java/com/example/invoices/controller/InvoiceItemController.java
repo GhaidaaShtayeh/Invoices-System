@@ -28,6 +28,9 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/invoiceItem")
+/*
+here are the controllers to manage items for specific invoice
+*/
 public class InvoiceItemController {
     @Autowired
     InvoiceItemServiceImpl invoiceService;
