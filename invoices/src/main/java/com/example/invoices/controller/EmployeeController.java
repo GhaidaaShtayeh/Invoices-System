@@ -26,18 +26,21 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
-public class EmployeeController {
-	private SetHeaders headers;
 
-	public EmployeeController(){
-		headers = new SetHeaders();
-	}
+/*
+here I put all employee controllers (employee refer to user in the system)
+I can add new employee and show list of employees in super_user page, update them
+and show details
+ */
+public class EmployeeController {
 
 	@Autowired
 	EmployeeService employeeService;
-	@Autowired
-	RoleRepository roleRepository;
 
+
+	/*
+	* it's the register api and use in add new employee  in super user page
+	*/
 	@PostMapping("/save")
 	public ResponseEntity<?> addEmployee(@RequestBody EmployeeDTO employee) {
 		Employee employee1 = employeeService.saveEmployee(employee);
@@ -46,12 +49,19 @@ public class EmployeeController {
 	}
 
 
+	/*
+	* display list of users that are registered in the system
+	*/
 	@GetMapping("/viewList")
 	public ResponseEntity<List<Employee>> getAllEmployees() {
 		List<Employee> customers = employeeService.getAllEmployee();
 		LOGGER.info(" get all customers controllers are calling ");
 		return new ResponseEntity<>(customers, HttpStatus.OK);
 	}
+
+	/*
+	* update employee details in the system
+	*/
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") int id, @RequestBody EmployeeDTO employeeDTO) {
 		Employee newEmployee = employeeService.updateEmployee(id, employeeDTO);
@@ -60,6 +70,9 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(newEmployee, HttpStatus.OK);
 	}
 
+	/*
+	show and display employee details
+	*/
 	@GetMapping("/get-employee/{id}")
 	public ResponseEntity<?> getEmployee(@PathVariable int id){
 		Optional<Employee> employee = employeeService.getEmployee(id);
