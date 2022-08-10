@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.Console;
 import java.util.List;
 
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
@@ -29,7 +30,8 @@ public class InvoiceItemServiceImpl implements  InvoiceItemService{
             LOGGER.info("save Invoice item ");
             return newInvoice;
         }catch (Exception exception){
-            throw new InvoiceAlreadyExistsException();
+
+            throw new InvoiceAlreadyExistsException(exception.getMessage());
         }
 
     }

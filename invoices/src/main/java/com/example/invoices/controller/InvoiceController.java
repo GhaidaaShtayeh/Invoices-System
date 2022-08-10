@@ -14,6 +14,7 @@ import com.example.invoices.service.*;
 import com.example.invoices.utilite.FileUpload;
 import com.example.invoices.utilite.SetHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,22 +38,16 @@ import java.util.*;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @CrossOrigin(origins = "*")
+@Configuration
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
-
-    private SetHeaders headers;
-
-    public InvoiceController(){
-        headers = new SetHeaders();
-    }
 
     @Autowired
     InvoiceServiceImpl invoiceService;
     @Autowired
     InvoicesHistoryController invoicesHistoryController;
-    @Autowired
-    EmployeeServiceImpl employeeService;
+
 
 
     @GetMapping("/dashboard")
@@ -62,10 +57,11 @@ public class InvoiceController {
         return invoiceService.findAllInvoices(pageable);
     }
 
-    @GetMapping("/search")
-    public Invoice getInvoiceValue(@RequestBody long invoiceId){
-        Invoice invoice = invoiceService.getInvoiceBySerialNumber(invoiceId);
-        LOGGER.info(" search Api controller are calling  foe serialNumber : " +invoiceId);
+    @GetMapping("/search/{serialNumber}")
+    public List<Invoice> getInvoiceValue(@PathVariable(value = "serialNumber") long serialNumber){
+        List<Invoice> invoice  = new ArrayList<>();
+        invoice.add(invoiceService.getInvoiceBySerialNumber(serialNumber));
+        LOGGER.info(" search Api controller are calling  foe serialNumber : " +serialNumber);
         return invoice;
     }
 
@@ -115,13 +111,11 @@ public class InvoiceController {
         return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
-    @GetMapping("/getInvoicesEmployee/{serialNumber}")
-    public ResponseEntity<?> getInvoiceByEmployee(@PathVariable long serialNumber){
-            Employee employee = employeeService.getEmployeeBySerialNumber(serialNumber);
-        LOGGER.info(" get All invoice with id details Api are calling from controller for Employee "+ serialNumber);
-        List<Invoice> invoice = invoiceService.getAllInvoicesByEmpId(employee);
-        LOGGER.info(" get All invoice from controller are calling ");
-        return new ResponseEntity<>(invoice, HttpStatus.OK);
+    @GetMapping("/getInvoices")
+    public ResponseEntity<?> getInvoiceByEmployee(@RequestHeader (name="Authorization") String token) {
+        List<Invoice> invoices = invoiceService.getInvoice(token);
+        LOGGER.info(" list of invoices displayed controller calling ");
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
 }
