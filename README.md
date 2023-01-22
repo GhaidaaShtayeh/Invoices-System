@@ -14,6 +14,7 @@ To get started with the project, you will need to have the following tools insta
 ## Planning Stage:
 1- Provide a DB design
    - Define functionalities flow and required web APIs
+
 2- Implementation Process (backend):
    - Setup workspace environment
    - Create login and signup views
