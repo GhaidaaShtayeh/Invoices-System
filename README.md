@@ -1,60 +1,34 @@
-# Invoices-Management-System
+# Invoices Management System
+This project is an application that aims to make invoices easier to track. It includes functionalities such as creating, editing, retrieving, and deleting invoices.
 
-## Overview
+## Getting Started
+To get started with the project, you will need to have the following tools installed on your machine:
 
-An application to make invoices easier to be tracked
+- [Git](https://git-scm.com/) for version control
+- [Spring Boot](https://spring.io/) for the backend]
+- [MySQL](https://www.mysql.com/) for the database
 
 ## Plan & Workflow
+- Define used tools and prepare the workspace
 
-### 1- Define used tools and prepare workspace.
-Used tools: Git, spring boot, mysql, Angular Framework (Frontend side)
+## Planning Stage:
+1- Provide a DB design
+   - Define functionalities flow and required web APIs
+2- Implementation Process (backend):
+   - Setup workspace environment
+   - Create login and signup views
+   - Implement security measures such as JWT
+   - Implement paginated and sorted dashboard
+   - Implement main functionalities (add, edit, retrieve, delete invoices)
+   - Add Users Roles and Security checks for both backend and frontend
 
+## Installing
+To install the necessary tools, please follow the instructions provided on the respective websites.
 
-### 2- Planning Stage
-● Provide a DB Design - EMR
+## Running the Application
+To run the application, you will need to first start the backend server using Spring Boot. Then, you can run the frontend using Angular Framework.
 
-![ERD-Inovices (3)](https://user-images.githubusercontent.com/79005401/177310660-f22055e8-a38e-40ee-a19e-855f1e91fc1a.jpg)
-
-
-● Define Functionalities flow - Flowchart for each functionality
-
-● Define required web APIs
-
-### 3- Implementation Process ( For backend side )
-
-- Setup workspace environment
-
-- Login and Signup Views -handle all functionalities
-
-- Login
-
-- Signup
-
-- Logout
-
-- Security issues ! JWT
-
-- Paginated and Sorted Dashboard (10/page)
-
-- Start implementing main functionalities
-
-- Add Invoices
-
-- edit/replaces invoices
-
-- retrieve/preview invoice/s
-
-- Delete invoice/invoices
-
-### 4- Add Users Roles and Security checks for both backend sides.
-
-### 5- Create a presentation and describe the whole system
-
-## Notes:
-● Write Clean Code, follow three tier architecture, and keep the project well organized.
-
-● Keep checking the compatibility between written code and document requirements.
-
-● Exception will be handled during coding process
-
-
+## Note
+- Write clean code and follow the three-tier architecture to keep the project well-organized
+- Check compatibility between the written code and document requirements
+- Exception handling will be implemented during the coding process.
